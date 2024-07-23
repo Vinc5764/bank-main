@@ -1,10 +1,4 @@
-'use client'
-
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/iaWvTIKlHth
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
+"use client";
 import Link from "next/link";
 import {
   DropdownMenu,
@@ -27,24 +21,24 @@ import { Input } from "@/components/ui/input";
 import { useEffect } from "react";
 
 export default function CustomerHome() {
-   useEffect(() => {
-     const fetchData = async () => {
-       try {
-         const response = await fetch(`http://localhost:3000/users/details`);
-         if (!response.ok) {
-           throw new Error("Failed to fetch data");
-         }
-         const data = await response.json();
-         console.log(data);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/users/details`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const data = await response.json();
+        console.log(data);
 
-         //  setFetchedData(data);
-       } catch (error) {
-         console.error("Error fetching data:", error);
-       }
-     };
+        //  setFetchedData(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-     (async () => await fetchData())();
-   }, []);
+    (async () => await fetchData())();
+  }, []);
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <main className="flex-1 p-4 sm:p-6">
@@ -55,11 +49,14 @@ export default function CustomerHome() {
             </CardHeader>
             <CardContent className="flex items-center justify-between">
               <div className="text-4xl font-bold">$5,234.56</div>
-              <Link href="/dashboard/deposits" className="text-primary" prefetch={false}>
-              <Button variant="outline" size="sm">
-                Deposit
-              </Button>
-                
+              <Link
+                href="/dashboard/deposits"
+                className="text-primary"
+                prefetch={false}
+              >
+                <Button variant="outline" size="sm">
+                  Deposit
+                </Button>
               </Link>
             </CardContent>
           </Card>
@@ -69,11 +66,14 @@ export default function CustomerHome() {
             </CardHeader>
             <CardContent className="flex items-center justify-between">
               <div className="text-4xl font-bold">$1,200.00</div>
-              <Link href="/dashboard/withdraw" className="text-primary" prefetch={false}>
-              <Button variant="outline" size="sm">
-                Withdraw
-              </Button>
-                
+              <Link
+                href="/dashboard/withdraw"
+                className="text-primary"
+                prefetch={false}
+              >
+                <Button variant="outline" size="sm">
+                  Withdraw
+                </Button>
               </Link>
             </CardContent>
           </Card>
@@ -208,7 +208,7 @@ export default function CustomerHome() {
   );
 }
 
-function ArrowDownIcon(props:any) {
+function ArrowDownIcon(props: any) {
   return (
     <svg
       {...props}
@@ -228,7 +228,7 @@ function ArrowDownIcon(props:any) {
   );
 }
 
-function ArrowUpIcon(props:any) {
+function ArrowUpIcon(props: any) {
   return (
     <svg
       {...props}
@@ -248,7 +248,7 @@ function ArrowUpIcon(props:any) {
   );
 }
 
-function BanknoteIcon(props:any) {
+function BanknoteIcon(props: any) {
   return (
     <svg
       {...props}
@@ -269,7 +269,7 @@ function BanknoteIcon(props:any) {
   );
 }
 
-function XIcon(props:any) {
+function XIcon(props: any) {
   return (
     <svg
       {...props}

@@ -28,21 +28,24 @@ export default function Withdrawal() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e:any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const response = await axios.post("https://4195-102-176-65-181.ngrok-free.app/deposit", {
-        account: accountType,
-        amount,
-        email,
-      });
+      const response = await axios.post(
+        "https://bank-payment-server.onrender.com/deposit",
+        {
+          account: accountType,
+          amount,
+          email,
+        }
+      );
 
       console.log(response);
 
-      if ( response.data.data.authorization_url) {
-        window.location.href = response.data.data.authorization_url;
+      if (response.data.data.data.authorization_url) {
+        window.location.href = response.data.data.data.authorization_url;
       } else {
         console.error("Authorization URL not found in the response.");
       }
@@ -82,19 +85,14 @@ export default function Withdrawal() {
       <Card>
         <CardHeader>
           <CardTitle>Deposit Funds</CardTitle>
-          <CardDescription>
-            Enter the details for your Deposit.
-          </CardDescription>
+          <CardDescription>Enter the details for your Deposit.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <form className="grid gap-4" onSubmit={handleSubmit}>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="account-type">Account Type</Label>
-                <Select
-                  value={accountType}
-                  onValueChange={setAccountType}
-                >
+                <Select value={accountType} onValueChange={setAccountType}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select account type" />
                   </SelectTrigger>
@@ -127,7 +125,7 @@ export default function Withdrawal() {
               />
             </div>
             <Button type="submit" size="lg" disabled={loading}>
-              {loading ? <Spinner/> : "Withdraw"}
+              {loading ? <Spinner /> : "Withdraw"}
             </Button>
           </form>
         </CardContent>
@@ -136,7 +134,7 @@ export default function Withdrawal() {
   );
 }
 
-function CreditCardIcon(props:any) {
+function CreditCardIcon(props: any) {
   return (
     <svg
       {...props}
