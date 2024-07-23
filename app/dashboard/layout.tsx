@@ -16,8 +16,7 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@/components/ui/tooltip";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import useTokenStore from "@/lib/store";
 
@@ -56,6 +55,7 @@ const sidebarLinks = [
 function RootLayout({ children }: any) {
   const router = useRouter();
   const { token, userType, clearToken, name } = useTokenStore();
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -63,7 +63,7 @@ function RootLayout({ children }: any) {
     } else {
       router.push("/dashboard");
     }
-  }, [router]);
+  }, [router, token]);
 
   const handleLogout = () => {
     clearToken();
@@ -87,7 +87,6 @@ function RootLayout({ children }: any) {
         </nav>
         <div className="flex items-center gap-2">
           <span className="">Cal Bank</span>
-
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="rounded-full">
@@ -103,18 +102,26 @@ function RootLayout({ children }: any) {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Logged in as {name}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {/* <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem> */}
-              <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="sm:hidden"
+            onClick={() => setSidebarOpen(!isSidebarOpen)}
+          >
+            <MenuIcon />
+          </Button>
         </div>
       </header>
-
       <div className="flex flex-1">
-        <aside className="hidden w-14 flex-col border-r bg-background sm:flex">
-          <nav className="flex flex-col items-center gap-4 px-2 py-5">
+        <aside
+          className={`${
+            isSidebarOpen ? "block" : "hidden"
+          } w-14 flex-col border-r bg-background sm:flex sm:w-auto`}
+        >
+          <nav className="flex flex-col items-center gap-4 px-2 py-5  sm:gap-6">
             <TooltipProvider>
               {sidebar.map((link) => (
                 <Tooltip key={link.label}>
@@ -143,6 +150,27 @@ function RootLayout({ children }: any) {
 }
 
 export default RootLayout;
+
+function MenuIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="4" x2="20" y1="12" y2="12" />
+      <line x1="4" x2="20" y1="6" y2="6" />
+      <line x1="4" x2="20" y1="18" y2="18" />
+    </svg>
+  );
+}
 
 function BanknoteIcon(props: any) {
   return (
