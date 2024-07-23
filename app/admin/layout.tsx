@@ -100,7 +100,7 @@ function RootLayout({ children }: any) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Logged in as {name}</DropdownMenuLabel>
+              <DropdownMenuLabel>Logged in as admin</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
