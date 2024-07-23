@@ -48,7 +48,7 @@ export default function CustomerHome() {
               <CardTitle>Account Balance</CardTitle>
             </CardHeader>
             <CardContent className="flex items-center justify-between">
-              <div className="text-4xl font-bold">$5,234.56</div>
+              <div className="text-4xl font-bold">$0.00.</div>
               <Link
                 href="/dashboard/deposits"
                 className="text-primary"
@@ -65,7 +65,7 @@ export default function CustomerHome() {
               <CardTitle>Pending Withdrawals</CardTitle>
             </CardHeader>
             <CardContent className="flex items-center justify-between">
-              <div className="text-4xl font-bold">$1,200.00</div>
+              <div className="text-4xl font-bold">$0.00</div>
               <Link
                 href="/dashboard/withdraw"
                 className="text-primary"

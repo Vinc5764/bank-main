@@ -226,7 +226,7 @@ export default function AdminHome() {
                   </CardHeader>
                   <CardContent>
                     <div className="text-4xl font-semibold">
-                      ${results?.totalWithdrawals}
+                      ${results?.totalWithdrawals ?? 0}
                     </div>
                   </CardContent>
                 </Card>
@@ -249,7 +249,7 @@ export default function AdminHome() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {reports.map((transaction:any, index:any) => (
+                  {reports.map((transaction: any, index: any) => (
                     <TableRow key={index}>
                       <TableCell>
                         {/* <div className="font-medium">{transaction.account}</div> */}
