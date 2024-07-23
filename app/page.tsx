@@ -106,11 +106,11 @@ const Page = () => {
         <CardContent>
           <div className="grid gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">User Id</Label>
               <Input
-                id="email"
+                id="text"
                 type="text"
-                placeholder="m@example.com"
+                placeholder="simon123"
                 onChange={(e) => setEmail(e.target.value)}
                 className={emailError ? "border-red-500" : ""}
                 required
@@ -123,7 +123,7 @@ const Page = () => {
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
                 <Link
-                  href={`/forgotpass/`}
+                  href={`/reset-password`}
                   className="ml-auto inline-block text-sm underline"
                 >
                   Forgot your password?

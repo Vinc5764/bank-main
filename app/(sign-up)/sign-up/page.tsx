@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Spinner from "@/components/Spinner";
 
 const Page = () => {
   const [fullName, setFullName] = useState("");
@@ -20,24 +21,29 @@ const Page = () => {
   const [password, setPassword] = useState("");
   const [bankType, setBankType] = useState(""); // State for bank type
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false); // State for loading
   const router = useRouter();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setError(null);
+    setLoading(true); // Set loading to true when request starts
     try {
-      const response = await axios.post("https://bank-payment-server.onrender.com/users/signup", {
-        userid: fullName,
-        email: email,
-        password: password,
-        bankType: bankType, // Include bankType in the request
-      });
-      // const token = response.data.token;
-      // localStorage.setItem("token", token);
+      const response = await axios.post(
+        "https://4195-102-176-65-181.ngrok-free.app/users/signup",
+        {
+          userid: fullName,
+          email: email,
+          password: password,
+          bankType: bankType, // Include bankType in the request
+        }
+      );
       console.log(response.data);
+      setLoading(false); // Set loading to false when request ends
       router.push("/"); // Redirect after successful registration
     } catch (error: any) {
       console.error("Sign-up failed", error);
+      setLoading(false); // Set loading to false if there's an error
     }
   };
 
@@ -92,14 +98,17 @@ const Page = () => {
                 required
               >
                 <option value="">Select...</option>
-                <option value="Savings">Savings</option>
-                <option value="Current">Current</option>
-                <option value="Fixed Deposit">Fixed Deposit</option>
+                <option value="Savings">Cal Bank</option>
+
                 {/* Add more options as needed */}
               </select>
             </div>
-            <Button onClick={handleSubmit} className="w-full">
-              Create an account
+            <Button
+              onClick={handleSubmit}
+              className="w-full"
+              disabled={loading}
+            >
+              {loading ? <Spinner /> : "Create an account"}
             </Button>
             {/* <Button variant="outline" className="w-full">
               Sign up with GitHub
