@@ -55,8 +55,7 @@ const sidebarLinks = [
 
 function RootLayout({ children }: any) {
   const router = useRouter();
-  ;
-  const { token, userType, clearToken,name } = useTokenStore();
+  const { token, userType, clearToken, name } = useTokenStore();
 
   useEffect(() => {
     if (!token) {
