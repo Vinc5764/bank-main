@@ -19,6 +19,7 @@ import {
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import useTokenStore from "@/lib/store";
 
 const navLinks = [
   { href: "#", label: "Accounts" },
@@ -54,11 +55,10 @@ const sidebarLinks = [
 
 function RootLayout({ children }: any) {
   const router = useRouter();
-  const usertype = localStorage.getItem("usertype");
-  const user = localStorage.getItem("name");
+  ;
+  const { token, userType, clearToken,name } = useTokenStore();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
     if (!token) {
       router.push("/");
     } else {
@@ -67,11 +67,11 @@ function RootLayout({ children }: any) {
   }, [router]);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    clearToken();
     router.push("/");
   };
 
-  const sidebar = usertype === "customer" ? sidebarLinksCustomer : sidebarLinks;
+  const sidebar = userType === "customer" ? sidebarLinksCustomer : sidebarLinks;
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -102,7 +102,7 @@ function RootLayout({ children }: any) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Logged in as {user}</DropdownMenuLabel>
+              <DropdownMenuLabel>Logged in as {name}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {/* <DropdownMenuItem>Profile</DropdownMenuItem>
               <DropdownMenuItem>Settings</DropdownMenuItem> */}

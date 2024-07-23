@@ -24,20 +24,18 @@ const Page = () => {
   const [error, setError] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [passwordError, setPasswordError] = useState<string | null>(null);
-  const { token, setToken } = useTokenStore();
+  const { setToken } = useTokenStore();
+  const { token } = useTokenStore();
 
   const r = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
     if (!token) {
-      r.push('/');
-    }
-    else{
-      r.push('/dashboard');
+      r.push("/");
+    } else {
+      r.push("/dashboard");
     }
   }, [r]);
-
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -50,26 +48,28 @@ const Page = () => {
       //   userid: email,
       //   password: password,
       // });
-      const response:any = await fetch("https://4195-102-176-65-181.ngrok-free.app/users/login", {
-        method: "POST",
-        
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer f3eac184635c8886dcb0a2b1f1dcdf35b5b2ae778d1c36f95245ba58278df78222e9d5ec48532a14608d1b3c3665f9def41f`, // Add the Bearer token for authorization
-        },
-        body: JSON.stringify({
-          userid: email,
-          password: password,
-        }),
-      });
-     const res= await response.json()
+      const response: any = await fetch(
+        "https://4195-102-176-65-181.ngrok-free.app/users/login",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer f3eac184635c8886dcb0a2b1f1dcdf35b5b2ae778d1c36f95245ba58278df78222e9d5ec48532a14608d1b3c3665f9def41f`, // Add the Bearer token for authorization
+          },
+          body: JSON.stringify({
+            userid: email,
+            password: password,
+          }),
+        }
+      );
+      const res = await response.json();
       console.log(res);
 
       setIsLoading(false);
       const token = res.token;
-      localStorage.setItem("token", token);
-      localStorage.setItem("usertype", res.existingUser.usertype);
-      localStorage.setItem("name", res.existingUser.userid);
+
+      setToken(token, res.existingUser.usertype, res.existingUser.userid);
 
       if (res.token) {
         r.push("/dashboard/");
