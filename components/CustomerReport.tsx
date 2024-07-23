@@ -28,6 +28,7 @@ import {
 import axios from "axios";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import useTokenStore from "@/lib/store";
 
 export default function CustomerReport() {
   const [transactions, setTransactions] = useState([
@@ -41,12 +42,18 @@ export default function CustomerReport() {
   const [filterDescription, setFilterDescription] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const categories = ["pending"];
+  const { token, userType, clearToken, name } = useTokenStore();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://bank-payment-server.onrender.com/admin/reports`
+          `https://bank-payment-server.onrender.com/reports`,
+          {
+            params: {
+              userid: name,
+            },
+          }
         );
         if (!response) {
           throw new Error("Failed to fetch data");
@@ -61,7 +68,7 @@ export default function CustomerReport() {
   }, []);
 
   const filteredTransactions = useMemo(() => {
-    return data.filter((transaction:any) => {
+    return data.filter((transaction: any) => {
       const dateMatch = filterDate.start
         ? new Date(transaction.date) >= new Date(filterDate.start) &&
           new Date(transaction.date) <= new Date(filterDate.end)
@@ -90,32 +97,32 @@ export default function CustomerReport() {
   );
   const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
 
-    const handlePageChange = (page:any) => {
+  const handlePageChange = (page: any) => {
     setCurrentPage(page);
   };
 
-  const handleDateFilter = (start:any, end:any) => {
+  const handleDateFilter = (start: any, end: any) => {
     setFilterDate({ start, end });
     setCurrentPage(1);
   };
 
-    const handleAmountFilter = (min:any, max:any) => {
+  const handleAmountFilter = (min: any, max: any) => {
     setFilterAmount({ min, max });
     setCurrentPage(1);
   };
 
-  const handleDescriptionFilter = (description:any) => {
+  const handleDescriptionFilter = (description: any) => {
     setFilterDescription(description);
     setCurrentPage(1);
   };
 
-  const handleCategoryFilter = (category:any) => {
+  const handleCategoryFilter = (category: any) => {
     setFilterCategory(category);
     setCurrentPage(1);
   };
 
   const handleDownload = async () => {
-    const input:any = document.querySelector(".w-full.max-w-6xl.mx-auto");
+    const input: any = document.querySelector(".w-full.max-w-6xl.mx-auto");
 
     if (input) {
       const canvas = await html2canvas(input);
@@ -173,7 +180,7 @@ export default function CustomerReport() {
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="range"
-                    onSelect={(range:any) =>
+                    onSelect={(range: any) =>
                       handleDateFilter(range.start, range.end)
                     }
                   />
@@ -216,15 +223,14 @@ export default function CustomerReport() {
             <div>
               <Label htmlFor="category">Status</Label>
               <Select
-                
                 value={filterCategory}
-                onValueChange={(e:any) => handleCategoryFilter(e.target.value)}
+                onValueChange={(e: any) => handleCategoryFilter(e.target.value)}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((category:any) => (
+                  {categories.map((category: any) => (
                     <SelectItem
                       key={category.value}
                       value={category.value}
@@ -249,7 +255,7 @@ export default function CustomerReport() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {currentItems.map((transaction:any) => (
+              {currentItems.map((transaction: any) => (
                 <TableRow key={transaction?.id}>
                   <TableCell>{transaction?.account}</TableCell>
                   <TableCell>${transaction?.amount.toFixed(2)}</TableCell>
@@ -313,7 +319,7 @@ export default function CustomerReport() {
   );
 }
 
-function ChevronLeftIcon(props:any) {
+function ChevronLeftIcon(props: any) {
   return (
     <svg
       {...props}
@@ -332,7 +338,7 @@ function ChevronLeftIcon(props:any) {
   );
 }
 
-function ChevronRightIcon(props:any) {
+function ChevronRightIcon(props: any) {
   return (
     <svg
       {...props}
@@ -351,7 +357,7 @@ function ChevronRightIcon(props:any) {
   );
 }
 
-function XIcon(props:any) {
+function XIcon(props: any) {
   return (
     <svg
       {...props}
