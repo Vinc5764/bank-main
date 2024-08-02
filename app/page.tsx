@@ -44,17 +44,20 @@ const Page = () => {
     setPasswordError(null);
     try {
       setIsLoading(true);
-      const response: any = await fetch("http://localhost:3001/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer f3eac184635c8886dcb0a2b1f1dcdf35b5b2ae778d1c36f95245ba58278df78222e9d5ec48532a14608d1b3c3665f9def41f`,
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
-      });
+      const response: any = await fetch(
+        "https://9a14-197-251-205-122.ngrok-free.app/users/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer f3eac184635c8886dcb0a2b1f1dcdf35b5b2ae778d1c36f95245ba58278df78222e9d5ec48532a14608d1b3c3665f9def41f`,
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        }
+      );
       const res = await response.json();
 
       setIsLoading(false);

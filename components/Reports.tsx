@@ -47,7 +47,7 @@ export default function Reports() {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `https://bank-payment-server.onrender.com/admin/reports`
+          `https://9a14-197-251-205-122.ngrok-free.app/admin/reports`
         );
         if (!response) {
           throw new Error("Failed to fetch data");
@@ -64,7 +64,7 @@ export default function Reports() {
   }, []);
 
   const filteredTransactions = useMemo(() => {
-    return data.filter((transaction:any) => {
+    return data.filter((transaction: any) => {
       const date = transaction.dateDeposited || transaction.dateWithdrawn;
       const dateMatch =
         filterDate.start && filterDate.end
@@ -96,32 +96,32 @@ export default function Reports() {
   );
   const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
 
-  const handlePageChange = (page:any) => {
+  const handlePageChange = (page: any) => {
     setCurrentPage(page);
   };
 
-  const handleDateFilter = (range:any) => {
+  const handleDateFilter = (range: any) => {
     setFilterDate({ start: range?.start, end: range?.end });
     setCurrentPage(1);
   };
 
-  const handleAmountFilter = (min:any, max:any) => {
+  const handleAmountFilter = (min: any, max: any) => {
     setFilterAmount({ min, max });
     setCurrentPage(1);
   };
 
-  const handleDescriptionFilter = (description:any) => {
+  const handleDescriptionFilter = (description: any) => {
     setFilterDescription(description);
     setCurrentPage(1);
   };
 
-  const handleCategoryFilter = (category:any) => {
+  const handleCategoryFilter = (category: any) => {
     setFilterCategory(category);
     setCurrentPage(1);
   };
 
   const handleDownload = async () => {
-    const input:any = document.querySelector(".w-full.max-w-6xl.mx-auto");
+    const input: any = document.querySelector(".w-full.max-w-6xl.mx-auto");
 
     if (input) {
       const canvas = await html2canvas(input);
@@ -183,7 +183,6 @@ export default function Reports() {
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="range"
-                   
                     onSelect={(range) => handleDateFilter(range)}
                   />
                 </PopoverContent>
@@ -251,7 +250,7 @@ export default function Reports() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {currentItems.map((transaction:any) => (
+                {currentItems.map((transaction: any) => (
                   <TableRow key={transaction._id}>
                     <TableCell>
                       {new Date(

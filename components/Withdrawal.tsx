@@ -42,13 +42,16 @@ export default function Withdrawal() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3001/withdrawal", {
-        account: accountType,
-        accountNumber: datas.account.accountNumber,
-        amount,
-        purpose,
-        email,
-      });
+      const response = await axios.post(
+        "https://9a14-197-251-205-122.ngrok-free.app/withdrawal",
+        {
+          account: accountType,
+          accountNumber: datas.account.accountNumber,
+          amount,
+          purpose,
+          email,
+        }
+      );
 
       console.log("Withdrawal successful:", response.data);
       setIsModalOpen(true); // Open the modal on successful request

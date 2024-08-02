@@ -64,7 +64,9 @@ export default function CreateMembers() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`hhttp://localhost:3001/api/getMembers`);
+        const response = await fetch(
+          `https://9a14-197-251-205-122.ngrok-free.app/api/getMembers`
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -82,12 +84,15 @@ export default function CreateMembers() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post("http://localhost:3001/admin/members", {
-        name,
-        email,
-        password,
-        accountNumber,
-      });
+      const response = await axios.post(
+        "https://9a14-197-251-205-122.ngrok-free.app/admin/members",
+        {
+          name,
+          email,
+          password,
+          accountNumber,
+        }
+      );
       const token = response.data.token;
       console.log(response.data);
       setLoading(false);

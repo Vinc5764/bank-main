@@ -22,7 +22,7 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const router = useRouter(); // Initialize useRouter
 
-  const handleInputChange = (e:any) => {
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -30,7 +30,7 @@ export default function Signup() {
     });
   };
 
-  const handleFileChange = async (event:any) => {
+  const handleFileChange = async (event: any) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       try {
@@ -44,7 +44,7 @@ export default function Signup() {
     }
   };
 
-  const handleSubmit = async (e:any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true); // Set loading to true when form is submitted
 
@@ -55,13 +55,16 @@ export default function Signup() {
     };
 
     try {
-      const response = await fetch("http://localhost:3001/bank/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        "https://9a14-197-251-205-122.ngrok-free.app/bank/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       if (response.ok) {
         console.log("Bank signed up successfully");
@@ -227,7 +230,7 @@ export default function Signup() {
   );
 }
 
-function UploadIcon(props:any) {
+function UploadIcon(props: any) {
   return (
     <svg
       {...props}
@@ -248,7 +251,7 @@ function UploadIcon(props:any) {
   );
 }
 
-function XIcon(props:any) {
+function XIcon(props: any) {
   return (
     <svg
       {...props}

@@ -30,7 +30,7 @@ export default function CustomerHome() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/users/reports`,
+          `https://9a14-197-251-205-122.ngrok-free.app/users/reports`,
           {
             params: {
               accountNumber: datas.account.accountNumber,

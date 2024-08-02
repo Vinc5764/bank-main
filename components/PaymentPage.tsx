@@ -33,11 +33,14 @@ export default function Withdrawal() {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:3001/deposit", {
-        account: accountType,
-        amount,
-        email,
-      });
+      const response = await axios.post(
+        "https://9a14-197-251-205-122.ngrok-free.app/deposit",
+        {
+          account: accountType,
+          amount,
+          email,
+        }
+      );
 
       console.log(response);
 

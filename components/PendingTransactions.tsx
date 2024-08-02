@@ -119,7 +119,7 @@ export default function PendingTransaction() {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `http://localhost:3001/admin/pendingwithdrawals`
+          `https://9a14-197-251-205-122.ngrok-free.app/admin/pendingwithdrawals`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
