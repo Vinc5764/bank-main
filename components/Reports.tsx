@@ -47,7 +47,7 @@ export default function Reports() {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `https://9a14-197-251-205-122.ngrok-free.app/admin/reports`
+          `https://bank-payment-server.onrender.com/admin/reports`
         );
         if (!response) {
           throw new Error("Failed to fetch data");

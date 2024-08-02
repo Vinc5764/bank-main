@@ -34,14 +34,14 @@ export default function PendingTransaction() {
     accountType: "",
   });
 
-  const handleSearch = (e:any) => setSearch(e.target.value);
-  const handleFilterChange = (key:any, value:any) => {
-    setFilter((prev:any) => ({ ...prev, [key]: value }));
+  const handleSearch = (e: any) => setSearch(e.target.value);
+  const handleFilterChange = (key: any, value: any) => {
+    setFilter((prev: any) => ({ ...prev, [key]: value }));
   };
 
   const filteredData = useMemo(() => {
     return fetchData
-      .filter((request:any) => {
+      .filter((request: any) => {
         const searchValue = search?.toLowerCase();
         return (
           request?.accountNumber?.toLowerCase()?.includes(searchValue) ||
@@ -52,7 +52,7 @@ export default function PendingTransaction() {
           request?.account?.toLowerCase()?.includes(searchValue)
         );
       })
-      .filter((request:any) => {
+      .filter((request: any) => {
         return (
           (filter.purpose === "" ||
             request.purpose
@@ -76,7 +76,7 @@ export default function PendingTransaction() {
       });
   }, [search, filter, fetchData]);
 
-  const handleApprove = async (accountNumber:any) => {
+  const handleApprove = async (accountNumber: any) => {
     try {
       const response = await fetch(
         `http://localhost:3001/admin/approve/${accountNumber}`,
@@ -88,14 +88,14 @@ export default function PendingTransaction() {
         throw new Error("Failed to approve withdrawal");
       }
       setFetchedData(
-        fetchData.filter((req:any) => req.accountNumber !== accountNumber)
+        fetchData.filter((req: any) => req.accountNumber !== accountNumber)
       );
     } catch (error) {
       console.error("Error approving withdrawal:", error);
     }
   };
 
-  const handleReject = async (accountNumber:any) => {
+  const handleReject = async (accountNumber: any) => {
     try {
       const response = await fetch(
         `http://localhost:3001/admin/reject/${accountNumber}`,
@@ -107,7 +107,7 @@ export default function PendingTransaction() {
         throw new Error("Failed to reject withdrawal");
       }
       setFetchedData(
-        fetchData.filter((req:any) => req?.accountNumber !== accountNumber)
+        fetchData.filter((req: any) => req?.accountNumber !== accountNumber)
       );
     } catch (error) {
       console.error("Error rejecting withdrawal:", error);
@@ -119,7 +119,7 @@ export default function PendingTransaction() {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `https://9a14-197-251-205-122.ngrok-free.app/admin/pendingwithdrawals`
+          `https://bank-payment-server.onrender.com/admin/pendingwithdrawals`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -259,7 +259,7 @@ export default function PendingTransaction() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredData.map((request:any) => (
+                {filteredData.map((request: any) => (
                   <TableRow key={request.accountNumber}>
                     <TableCell>{request.accountNumber}</TableCell>
                     <TableCell>{request.account}</TableCell>
@@ -297,7 +297,7 @@ export default function PendingTransaction() {
   );
 }
 
-function FilterIcon(props:any) {
+function FilterIcon(props: any) {
   return (
     <svg
       {...props}
