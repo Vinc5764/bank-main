@@ -105,11 +105,11 @@ export default function CustomerReport() {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredTransactions.slice(
+  const currentItems = filteredTransactions?.slice(
     indexOfFirstItem,
     indexOfLastItem
   );
-  const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredTransactions?.length / itemsPerPage);
 
   const handlePageChange = (page: any) => {
     setCurrentPage(page);
@@ -190,7 +190,7 @@ export default function CustomerReport() {
                     variant="outline"
                     className="w-full justify-start font-normal"
                   >
-                    {filterDate.start && filterDate.end
+                    {filterDate?.start && filterDate?.end
                       ? `${filterDate.start} - ${filterDate.end}`
                       : "Select date range"}
                     <div className="ml-auto h-4 w-4 opacity-50" />
@@ -270,28 +270,28 @@ export default function CustomerReport() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {currentItems.map((transaction: any) => (
-                <TableRow key={transaction._id}>
-                  <TableCell>{transaction.accountNumber}</TableCell>
-                  <TableCell>${transaction.amount.toFixed(2)}</TableCell>
-                  <TableCell>{transaction.account}</TableCell>
+              {currentItems?.map((transaction: any) => (
+                <TableRow key={transaction?._id}>
+                  <TableCell>{transaction?.accountNumber}</TableCell>
+                  <TableCell>${transaction?.amount.toFixed(2)}</TableCell>
+                  <TableCell>{transaction?.account}</TableCell>
                   <TableCell>
                     <Badge
                       className="bg-green-500 text-white"
                       variant={
-                        transaction.status === "Approved"
+                        transaction?.status === "Approved"
                           ? "outline"
                           : "secondary"
                       }
                     >
-                      {transaction.status ?? "Pending"}
+                      {transaction?.status ?? "Pending"}
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    {transaction.dateWithdrawn
-                      ? new Date(transaction.dateWithdrawn).toLocaleDateString()
-                      : transaction.dateDeposited
-                      ? new Date(transaction.dateDeposited).toLocaleDateString()
+                    {transaction?.dateWithdrawn
+                      ? new Date(transaction?.dateWithdrawn).toLocaleDateString()
+                      : transaction?.dateDeposited
+                      ? new Date(transaction?.dateDeposited).toLocaleDateString()
                       : "N/A"}
                   </TableCell>
                 </TableRow>
@@ -302,7 +302,7 @@ export default function CustomerReport() {
         <div className="px-6 py-4 border-t flex items-center justify-between">
           <div className="text-muted-foreground">
             Showing {indexOfFirstItem + 1} to {indexOfLastItem} of{" "}
-            {filteredTransactions.length} transactions
+            {filteredTransactions?.length} transactions
           </div>
           <div className="flex items-center gap-2">
             <Button
