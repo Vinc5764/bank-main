@@ -30,9 +30,11 @@ import axios from "axios";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import useTokenStore from "@/lib/store";
+import { SkeletonDemo } from "./Skeleton";
 
 export default function CustomerReport() {
   const [transactions, setTransactions] = useState([]);
+  const [isloading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(20);
   const [data, setData] = useState([]);
@@ -50,9 +52,10 @@ export default function CustomerReport() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get(
-          `https://9a14-197-251-205-122.ngrok-free.app/users/reports`,
+          `http://localhost:3001/users/reports`,
           {
             params: {
               accountNumber: datas.account.accountNumber,
@@ -62,6 +65,7 @@ export default function CustomerReport() {
         if (!response) {
           throw new Error("Failed to fetch data");
         }
+        setIsLoading(false);
         setData(response.data.allTransactions);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -259,45 +263,53 @@ export default function CustomerReport() {
           </div>
         </div>
         <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Account Number</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Account Type</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Date</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {currentItems?.map((transaction: any) => (
-                <TableRow key={transaction?._id}>
-                  <TableCell>{transaction?.accountNumber}</TableCell>
-                  <TableCell>${transaction?.amount.toFixed(2)}</TableCell>
-                  <TableCell>{transaction?.account}</TableCell>
-                  <TableCell>
-                    <Badge
-                      className="bg-green-500 text-white"
-                      variant={
-                        transaction?.status === "Approved"
-                          ? "outline"
-                          : "secondary"
-                      }
-                    >
-                      {transaction?.status ?? "Pending"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {transaction?.dateWithdrawn
-                      ? new Date(transaction?.dateWithdrawn).toLocaleDateString()
-                      : transaction?.dateDeposited
-                      ? new Date(transaction?.dateDeposited).toLocaleDateString()
-                      : "N/A"}
-                  </TableCell>
+          {isloading ? (
+            <SkeletonDemo />
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Account Number</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Account Type</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Date</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {currentItems?.map((transaction: any) => (
+                  <TableRow key={transaction?._id}>
+                    <TableCell>{transaction?.accountNumber}</TableCell>
+                    <TableCell>${transaction?.amount.toFixed(2)}</TableCell>
+                    <TableCell>{transaction?.account}</TableCell>
+                    <TableCell>
+                      <Badge
+                        className="bg-green-500 text-white"
+                        variant={
+                          transaction?.status === "Approved"
+                            ? "outline"
+                            : "secondary"
+                        }
+                      >
+                        {transaction?.status ?? "Pending"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {transaction?.dateWithdrawn
+                        ? new Date(
+                            transaction?.dateWithdrawn
+                          ).toLocaleDateString()
+                        : transaction?.dateDeposited
+                        ? new Date(
+                            transaction?.dateDeposited
+                          ).toLocaleDateString()
+                        : "N/A"}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </div>
         <div className="px-6 py-4 border-t flex items-center justify-between">
           <div className="text-muted-foreground">

@@ -21,26 +21,30 @@ import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import useTokenStore from "@/lib/store";
 import axios from "axios";
+import CurrentTariffsSkeleton from "./DashSkele";
 
 export default function CustomerHome() {
   const [fetchData, setFetchedData] = useState<any>({});
   const { datas } = useTokenStore();
+  const [isloading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get(
-          `https://9a14-197-251-205-122.ngrok-free.app/users/reports`,
+          `http://localhost:3001/users/reports`,
           {
             params: {
               accountNumber: datas.account.accountNumber,
             },
           }
         );
-
+        setIsLoading(false);
         setFetchedData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setIsLoading(false);
       }
     };
 
@@ -100,97 +104,101 @@ export default function CustomerHome() {
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <main className="flex-1 p-4 sm:p-6">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <Card>
-            <CardHeader>
-              <CardTitle>Checking Account</CardTitle>
-            </CardHeader>
-            <CardContent className="flex items-center justify-between">
-              <div className="text-4xl font-bold">
-                $ {fetchData?.totals?.checking?.toFixed(2) || 0.0}
-              </div>
-              <Link
-                href="/dashboard/deposits"
-                className="text-primary"
-                prefetch={false}
-              >
-                <Button variant="outline" size="sm">
-                  Deposit
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Investment</CardTitle>
-            </CardHeader>
-            <CardContent className="flex items-center justify-between">
-              <div className="text-4xl font-bold">
-                ${fetchData?.totals?.investing?.toFixed(2) ?? 0.0}
-              </div>
-              <Link
-                href="/dashboard/withdraw"
-                className="text-primary"
-                prefetch={false}
-              >
-                <Button variant="outline" size="sm">
-                  Deposit
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Transactions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-2">{recentTransactions}</div>
-            </CardContent>
-            <CardFooter>
-              <Link href="#" className="text-primary" prefetch={false}>
-                View all transactions
-              </Link>
-            </CardFooter>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Savings Account</CardTitle>
-            </CardHeader>
-            <CardContent className="flex items-center justify-between">
-              <div className="text-4xl font-bold">
-                ${fetchData?.totals?.savings?.toFixed(2) ?? 0.0}
-              </div>
-              <Link
-                href="/dashboard/deposits"
-                className="text-primary"
-                prefetch={false}
-              >
-                <Button variant="outline" size="sm">
-                  Deposit
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Total Account Balance</CardTitle>
-            </CardHeader>
-            <CardContent className="flex items-center justify-between">
-              <div className="text-4xl font-bold">
-                ${fetchData?.totals?.checking?.toFixed(2) ?? 0.0}
-              </div>
-              <Link
-                href="/dashboard/deposits"
-                className="text-primary"
-                prefetch={false}
-              >
-                <Button variant="outline" size="sm">
-                  Deposit
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </div>
+        {isloading ? (
+          <CurrentTariffsSkeleton />
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <Card>
+              <CardHeader>
+                <CardTitle>Checking Account</CardTitle>
+              </CardHeader>
+              <CardContent className="flex items-center justify-between">
+                <div className="text-4xl font-bold">
+                  $ {fetchData?.totals?.checking?.toFixed(2) || 0.0}
+                </div>
+                <Link
+                  href="/dashboard/deposits"
+                  className="text-primary"
+                  prefetch={false}
+                >
+                  <Button variant="outline" size="sm">
+                    Deposit
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Investment</CardTitle>
+              </CardHeader>
+              <CardContent className="flex items-center justify-between">
+                <div className="text-4xl font-bold">
+                  ${fetchData?.totals?.investing?.toFixed(2) ?? 0.0}
+                </div>
+                <Link
+                  href="/dashboard/withdraw"
+                  className="text-primary"
+                  prefetch={false}
+                >
+                  <Button variant="outline" size="sm">
+                    Deposit
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Transactions</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-2">{recentTransactions}</div>
+              </CardContent>
+              <CardFooter>
+                <Link href="#" className="text-primary" prefetch={false}>
+                  View all transactions
+                </Link>
+              </CardFooter>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Savings Account</CardTitle>
+              </CardHeader>
+              <CardContent className="flex items-center justify-between">
+                <div className="text-4xl font-bold">
+                  ${fetchData?.totals?.savings?.toFixed(2) ?? 0.0}
+                </div>
+                <Link
+                  href="/dashboard/deposits"
+                  className="text-primary"
+                  prefetch={false}
+                >
+                  <Button variant="outline" size="sm">
+                    Deposit
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Total Account Balance</CardTitle>
+              </CardHeader>
+              <CardContent className="flex items-center justify-between">
+                <div className="text-4xl font-bold">
+                  ${fetchData?.totals?.checking?.toFixed(2) ?? 0.0}
+                </div>
+                <Link
+                  href="/dashboard/deposits"
+                  className="text-primary"
+                  prefetch={false}
+                >
+                  <Button variant="outline" size="sm">
+                    Deposit
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </main>
     </div>
   );
