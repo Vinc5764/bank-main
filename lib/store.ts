@@ -35,7 +35,8 @@ interface TokenState {
   token: string | null;
   userType: UserType;
   name: any;
-  setToken: (token: string, userType: UserType, name: any) => void;
+  datas: any;
+  setToken: (token: string, userType: UserType, name: any, datas: any) => void;
   clearToken: () => void;
 }
 
@@ -45,8 +46,9 @@ const useTokenStore = create<TokenState>()(
       token: null,
       userType: null,
       name: null,
-      setToken: (token: string, userType: UserType, name: any) =>
-        set({ token, userType, name }),
+      datas: [],
+      setToken: (token: string, userType: UserType, name: any, datas: any) =>
+        set({ token, userType, name, datas }),
       clearToken: () => set({ token: null }),
     }),
     {

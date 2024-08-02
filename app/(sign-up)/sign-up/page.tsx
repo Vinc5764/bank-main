@@ -29,15 +29,12 @@ const Page = () => {
     setError(null);
     setLoading(true); // Set loading to true when request starts
     try {
-      const response = await axios.post(
-        "https://4195-102-176-65-181.ngrok-free.app/users/signup",
-        {
-          userid: fullName,
-          email: email,
-          password: password,
-          bankType: bankType, // Include bankType in the request
-        }
-      );
+      const response = await axios.post("http://localhost:3001/users/signup", {
+        userid: fullName,
+        email: email,
+        password: password,
+        bankType: bankType, // Include bankType in the request
+      });
       console.log(response.data);
       setLoading(false); // Set loading to false when request ends
       router.push("/"); // Redirect after successful registration

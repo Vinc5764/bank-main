@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useMemo, useEffect } from "react";
 import { Label } from "@/components/ui/label";
 import {
@@ -31,9 +32,7 @@ import html2canvas from "html2canvas";
 import useTokenStore from "@/lib/store";
 
 export default function CustomerReport() {
-  const [transactions, setTransactions] = useState([
-    // Sample transactions data
-  ]);
+  const [transactions, setTransactions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(20);
   const [data, setData] = useState([]);
@@ -41,53 +40,68 @@ export default function CustomerReport() {
   const [filterAmount, setFilterAmount] = useState({ min: "", max: "" });
   const [filterDescription, setFilterDescription] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
-  const categories = ["pending"];
-  const { token, userType, clearToken, name } = useTokenStore();
+  const [filterStatus, setFilterStatus] = useState(""); // Added status filter
+  const categories = [
+    { value: "pending", label: "Pending" },
+    { value: "success", label: "Success" },
+    { value: "rejected", label: "Rejected" },
+  ]; // Added status categories
+  const { token, userType, clearToken, name, datas } = useTokenStore();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://bank-payment-server.onrender.com/reports`,
+          `http://localhost:3001/users/reports`,
           {
             params: {
-              userid: name,
+              accountNumber: datas.account.accountNumber,
             },
           }
         );
         if (!response) {
           throw new Error("Failed to fetch data");
         }
-        setData(response.data.deposits);
+        setData(response.data.allTransactions);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [datas.account.accountNumber]);
 
   const filteredTransactions = useMemo(() => {
-    return data.filter((transaction: any) => {
-      const dateMatch = filterDate.start
-        ? new Date(transaction.date) >= new Date(filterDate.start) &&
-          new Date(transaction.date) <= new Date(filterDate.end)
-        : true;
-      const amountMatch = filterAmount.min
-        ? transaction.amount >= parseFloat(filterAmount.min) &&
-          transaction.amount <= parseFloat(filterAmount.max)
-        : true;
+    return data?.filter((transaction: any) => {
+      // Date filtering
+      const transactionDate = new Date(
+        transaction.dateWithdrawn || transaction.dateDeposited
+      );
+      const dateMatch =
+        (!filterDate.start || transactionDate >= new Date(filterDate.start)) &&
+        (!filterDate.end || transactionDate <= new Date(filterDate.end));
+
+      // Amount filtering
+      const amount = transaction.amount || 0;
+      const amountMatch =
+        (!filterAmount.min || amount >= parseFloat(filterAmount.min)) &&
+        (!filterAmount.max || amount <= parseFloat(filterAmount.max));
+
+      // Description filtering
       const descriptionMatch = filterDescription
         ? transaction.description
             .toLowerCase()
             .includes(filterDescription.toLowerCase())
         : true;
-      const categoryMatch = filterCategory
-        ? transaction.category.toLowerCase() === filterCategory.toLowerCase()
+
+      // Category filtering (status)
+      const statusMatch = filterStatus
+        ? transaction.status?.toLowerCase() === filterStatus.toLowerCase()
         : true;
-      return dateMatch && amountMatch && descriptionMatch && categoryMatch;
+
+      return dateMatch && amountMatch && descriptionMatch && statusMatch;
     });
-  }, [data, filterDate, filterAmount, filterDescription, filterCategory]);
+  }, [data, filterDate, filterAmount, filterDescription, filterStatus]);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -118,6 +132,11 @@ export default function CustomerReport() {
 
   const handleCategoryFilter = (category: any) => {
     setFilterCategory(category);
+    setCurrentPage(1);
+  };
+
+  const handleStatusFilter = (status: any) => {
+    setFilterStatus(status);
     setCurrentPage(1);
   };
 
@@ -162,7 +181,7 @@ export default function CustomerReport() {
       </div>
       <div className="bg-card rounded-lg shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b">
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-5 gap-4">
             <div>
               <Label htmlFor="date-range">Date Range</Label>
               <Popover>
@@ -214,7 +233,6 @@ export default function CustomerReport() {
               <Label htmlFor="description">Description</Label>
               <Input
                 id="description"
-                type="text"
                 placeholder="Search description"
                 value={filterDescription}
                 onChange={(e) => handleDescriptionFilter(e.target.value)}
@@ -223,19 +241,15 @@ export default function CustomerReport() {
             <div>
               <Label htmlFor="category">Status</Label>
               <Select
-                value={filterCategory}
-                onValueChange={(e: any) => handleCategoryFilter(e.target.value)}
+                value={filterStatus}
+                onValueChange={(value) => handleStatusFilter(value)}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((category: any) => (
-                    <SelectItem
-                      key={category.value}
-                      value={category.value}
-                      onClick={() => handleCategoryFilter(category.value)}
-                    >
+                  {categories.map((category) => (
+                    <SelectItem key={category.value} value={category.value}>
                       {category.label}
                     </SelectItem>
                   ))}
@@ -248,18 +262,19 @@ export default function CustomerReport() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Account</TableHead>
+                <TableHead>Account Number</TableHead>
                 <TableHead>Amount</TableHead>
-                <TableHead>Email</TableHead>
+                <TableHead>Account Type</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Date</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {currentItems.map((transaction: any) => (
-                <TableRow key={transaction?.id}>
-                  <TableCell>{transaction?.account}</TableCell>
-                  <TableCell>${transaction?.amount.toFixed(2)}</TableCell>
-                  <TableCell>{transaction?.email}</TableCell>
+                <TableRow key={transaction._id}>
+                  <TableCell>{transaction.accountNumber}</TableCell>
+                  <TableCell>${transaction.amount.toFixed(2)}</TableCell>
+                  <TableCell>{transaction.account}</TableCell>
                   <TableCell>
                     <Badge
                       className="bg-green-500 text-white"
@@ -269,8 +284,15 @@ export default function CustomerReport() {
                           : "secondary"
                       }
                     >
-                      {transaction.status ?? "success"}
+                      {transaction.status ?? "Pending"}
                     </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {transaction.dateWithdrawn
+                      ? new Date(transaction.dateWithdrawn).toLocaleDateString()
+                      : transaction.dateDeposited
+                      ? new Date(transaction.dateDeposited).toLocaleDateString()
+                      : "N/A"}
                   </TableCell>
                 </TableRow>
               ))}
@@ -294,7 +316,6 @@ export default function CustomerReport() {
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <Button
                 key={page}
-                // variant={currentPage === page ? "primary" : "outline"}
                 size="sm"
                 onClick={() => handlePageChange(page)}
               >

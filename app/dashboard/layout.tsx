@@ -57,13 +57,13 @@ function RootLayout({ children }: any) {
   const { token, userType, clearToken, name } = useTokenStore();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
-  useEffect(() => {
-    if (!token) {
-      router.push("/");
-    } else {
-      router.push("/dashboard");
-    }
-  }, [router, token]);
+  // useEffect(() => {
+  //   if (!token) {
+  //     router.push("/");
+  //   } else {
+  //     router.push("/dashboard");
+  //   }
+  // }, [router, token]);
 
   const handleLogout = () => {
     clearToken();

@@ -1,21 +1,82 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/2UZXhRN5Jr3
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
 "use client";
-
 import { useState } from "react";
+// Import useRouter from next/router
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { uploadFile } from "@/utils/upload";
+import { useRouter } from "next/navigation";
+import Spinner from "./Spinner";
 
 export default function Signup() {
   const [file, setFile] = useState<any>(null);
-  const handleFileChange = (event:any) => {
-    setFile(event.target.files[0]);
+  const [fileUrl, setFileUrl] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    phoneNumber: "",
+    address: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const router = useRouter(); // Initialize useRouter
+
+  const handleInputChange = (e:any) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
+
+  const handleFileChange = async (event:any) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      try {
+        const response = await uploadFile(selectedFile);
+        setFileUrl(response.secure_url); // Adjust this based on Cloudinary response structure
+        setFile(selectedFile);
+        console.log(response);
+      } catch (error) {
+        console.error("File upload failed:", error);
+      }
+    }
+  };
+
+  const handleSubmit = async (e:any) => {
+    e.preventDefault();
+    setLoading(true); // Set loading to true when form is submitted
+
+    const data = {
+      ...formData,
+      bankPermit: fileUrl,
+      userType: "bank",
+    };
+
+    try {
+      const response = await fetch("http://localhost:3001/bank/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        console.log("Bank signed up successfully");
+        setLoading(false);
+        router.push("/"); // Redirect to the login page on successful signup
+      } else {
+        console.error("Failed to sign up bank");
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8">
@@ -27,46 +88,69 @@ export default function Signup() {
             Join our platform and start accepting payments today.
           </p>
         </div>
-        <form className="space-y-6" action="#" method="POST">
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          {/* Form fields */}
           <div>
-            <Label htmlFor="bank-name" className="sr-only">
+            <Label htmlFor="name" className="sr-only">
               Bank Name
             </Label>
             <Input
-              id="bank-name"
-              name="bank-name"
+              id="name"
+              name="name"
               type="text"
-              autoComplete="bank-name"
+              autoComplete="name"
               required
               placeholder="Bank Name"
+              value={formData.name}
+              onChange={handleInputChange}
               className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-primary-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
             />
           </div>
           <div>
-            <Label htmlFor="email-address" className="sr-only">
+            <Label htmlFor="email" className="sr-only">
               Email address
             </Label>
             <Input
-              id="email-address"
+              id="email"
               name="email"
               type="email"
               autoComplete="email"
               required
               placeholder="Email address"
+              value={formData.email}
+              onChange={handleInputChange}
               className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-primary-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
             />
           </div>
           <div>
-            <Label htmlFor="phone-number" className="sr-only">
+            <Label htmlFor="password" className="sr-only">
+              Password
+            </Label>
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="new-password"
+              required
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleInputChange}
+              className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-primary-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+            />
+          </div>
+          <div>
+            <Label htmlFor="phoneNumber" className="sr-only">
               Phone Number
             </Label>
             <Input
-              id="phone-number"
-              name="phone-number"
+              id="phoneNumber"
+              name="phoneNumber"
               type="tel"
               autoComplete="tel"
               required
               placeholder="Phone Number"
+              value={formData.phoneNumber}
+              onChange={handleInputChange}
               className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-primary-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
             />
           </div>
@@ -80,6 +164,8 @@ export default function Signup() {
               rows={3}
               required
               placeholder="Address"
+              value={formData.address}
+              onChange={handleInputChange}
               className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-primary-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
             />
           </div>
@@ -94,7 +180,7 @@ export default function Signup() {
               {file ? (
                 <div className="flex flex-col items-center">
                   <img
-                    src={file.url}
+                    src={URL.createObjectURL(file)}
                     alt="Uploaded file"
                     width={200}
                     height={200}
@@ -132,7 +218,7 @@ export default function Signup() {
           </div>
           <div>
             <Button type="submit" className="w-full">
-              Sign up
+              {loading ? <Spinner /> : "Sign Up"}
             </Button>
           </div>
         </form>

@@ -1,8 +1,3 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/jum4yag2Cnm
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -39,55 +34,16 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
-const recentTransactions = [
-  {
-    member: { name: "John Doe", email: "johndoe@example.com" },
-    amount: "$500",
-    type: "Deposit",
-    date: "2023-04-15",
-    status: "Pending",
-  },
-  {
-    member: { name: "Jane Smith", email: "janesmith@example.com" },
-    amount: "$250",
-    type: "Withdrawal",
-    date: "2023-04-12",
-    status: "Approved",
-  },
-  {
-    member: { name: "Bob Johnson", email: "bobjohnson@example.com" },
-    amount: "$1,000",
-    type: "Deposit",
-    date: "2023-04-10",
-    status: "Approved",
-  },
-  {
-    member: { name: "Sarah Lee", email: "sarahlee@example.com" },
-    amount: "$300",
-    type: "Withdrawal",
-    date: "2023-04-08",
-    status: "Approved",
-  },
-];
+import CurrentTariffsSkeleton from "./DashSkele";
+import { SkeletonDemo } from "./Skeleton";
 
 export default function AdminHome() {
-  const [reports, setRports] = useState([]);
+  const [reports, setReports] = useState([]);
   const [results, setResults] = useState<any>([]);
-  const pendingWithdrawals = [
-    {
-      member: { name: "John Doe", email: "johndoe@example.com" },
-      amount: "$500",
-      date: "2023-04-15",
-    },
-    {
-      member: { name: "Jane Smith", email: "janesmith@example.com" },
-      amount: "$250",
-      date: "2023-04-12",
-    },
-  ];
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -96,23 +52,35 @@ export default function AdminHome() {
         const res = await axios.get(
           `https://bank-payment-server.onrender.com/admin/reports`
         );
-
-        console.log(response);
+        setIsLoading(false);
         setResults(response.data);
-        setRports(res.data.deposits);
+
+        const combinedReports:any = [
+          ...res.data.deposits.map((deposit:any) => ({
+            ...deposit,
+            type: "Deposit",
+          })),
+          ...res.data.withdrawals.map((withdrawal:any) => ({
+            ...withdrawal,
+            type: "Withdrawal",
+          })),
+        ];
+
+        setReports(combinedReports);
 
         if (!response || !res) {
           throw new Error("Failed to fetch data");
+          setIsLoading(false);
         }
-
-        //  setFetchedData(data);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setIsLoading(false);
       }
     };
 
     (async () => await fetchData())();
   }, []);
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
@@ -189,48 +157,52 @@ export default function AdminHome() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Total Members</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-4xl font-semibold">
-                      {results.users}
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Total Transactions</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-4xl font-semibold">
-                      ${results?.totalWithdrawals + results?.totalDeposits}
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Total Deposits</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-4xl font-semibold">
-                      ${results?.totalDeposits}
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Total Withdrawals</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-4xl font-semibold">
-                      ${results?.totalWithdrawals ?? 0}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+              {isLoading ? (
+                <CurrentTariffsSkeleton />
+              ) : (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Total Members</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-semibold">
+                        {results.users}
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Total Transactions</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-semibold">
+                        ${results?.totalWithdrawals + results?.totalDeposits}
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Total Deposits</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-semibold">
+                        ${results?.totalDeposits}
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Total Withdrawals</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-semibold">
+                        ${results?.totalWithdrawals ?? 0}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
             </CardContent>
           </Card>
           <Card>
@@ -238,129 +210,54 @@ export default function AdminHome() {
               <CardTitle>Recent Transactions</CardTitle>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Member</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Status</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {reports.map((transaction: any, index: any) => (
-                    <TableRow key={index}>
-                      <TableCell>
-                        {/* <div className="font-medium">{transaction.account}</div> */}
-                        <div className="text-sm text-muted-foreground">
-                          {transaction.email}
-                        </div>
-                      </TableCell>
-                      <TableCell>{transaction.amount}</TableCell>
-                      <TableCell>{transaction.account}</TableCell>
-                      <TableCell>{transaction.date}</TableCell>
-                      <TableCell>
-                        <Badge
-                          className=" bg-green-500 text-white"
-                          variant={
-                            transaction.status === "Approved"
-                              ? "outline"
-                              : "secondary"
-                          }
-                        >
-                          {transaction.status ?? "success"}
-                        </Badge>
-                      </TableCell>
+              {isLoading ? (
+                <SkeletonDemo />
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Account Number</TableHead>
+                      <TableHead>Amount</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Status</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {reports.map((transaction: any, index: any) => (
+                      <TableRow key={index}>
+                        <TableCell>
+                          <div className="text-sm text-muted-foreground">
+                            {transaction.accountNumber}
+                          </div>
+                        </TableCell>
+                        <TableCell>{transaction.amount}</TableCell>
+                        <TableCell>{transaction.type}</TableCell>
+                        <TableCell>
+                          {new Date(
+                            transaction.dateDeposited ||
+                              transaction.dateWithdrawn
+                          ).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell>
+                          <Badge
+                            className=" bg-green-500 text-white"
+                            variant={
+                              transaction.status === "Approved"
+                                ? "outline"
+                                : "secondary"
+                            }
+                          >
+                            {transaction.status ?? "success"}
+                          </Badge>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </CardContent>
           </Card>
-        </div>
-        <div className="grid auto-rows-max items-start gap-4 md:gap-8">
-          {/* <Card>
-            <CardHeader>
-              <CardTitle>Pending Withdrawals</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Member</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {pendingWithdrawals.map((withdrawal, index) => (
-                    <TableRow key={index}>
-                      <TableCell>
-                        <div className="font-medium">
-                          {withdrawal.member.name}
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          {withdrawal.member.email}
-                        </div>
-                      </TableCell>
-                      <TableCell>{withdrawal.amount}</TableCell>
-                      <TableCell>{withdrawal.date}</TableCell>
-                      <TableCell>
-                        <div className="flex gap-2">
-                          <Button variant="outline" size="sm">
-                            Approve
-                          </Button>
-                          <Button variant="outline" size="sm" color="red">
-                            Reject
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card> */}
-          {/* <Card>
-            <CardHeader>
-              <CardTitle>Member Management</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <Button>
-                  <PlusIcon className="mr-2 h-4 w-4" />
-                  Add Member
-                </Button>
-                <Button variant="outline">
-                  <UsersIcon className="mr-2 h-4 w-4" />
-                  View Members
-                </Button>
-                <Button variant="outline">
-                  <FilePenIcon className="mr-2 h-4 w-4" />
-                  Update Members
-                </Button>
-              </div>
-            </CardContent>
-          </Card> */}
-          {/* <Card>
-            <CardHeader>
-              <CardTitle>Transaction Records</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <Button variant="outline">
-                  <ActivityIcon className="mr-2 h-4 w-4" />
-                  View Transactions
-                </Button>
-                <Button variant="outline">
-                  <DownloadIcon className="mr-2 h-4 w-4" />
-                  Export Transactions
-                </Button>
-              </div>
-            </CardContent>
-          </Card> */}
         </div>
       </main>
     </div>
@@ -381,7 +278,8 @@ function ActivityIcon(props: any) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />
+      <path d="M22 12h-2.48a2 2 0 0 1-1.77-1.06l-3.27-6.11a2 2 0 0 0-1.77-1.06h-.18a2 2 0 0 0-1.77 1.06L7.88 8.94a2 2 0 0 1-1.77 1.06H2"></path>
+      <polyline points="12 3 12 12 15 9 18 12"></polyline>
     </svg>
   );
 }
@@ -400,72 +298,11 @@ function BanknoteIcon(props: any) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <rect width="20" height="12" x="2" y="6" rx="2" />
-      <circle cx="12" cy="12" r="2" />
-      <path d="M6 12h.01M18 12h.01" />
-    </svg>
-  );
-}
-
-function DeleteIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M20 5H9l-7 7 7 7h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Z" />
-      <line x1="18" x2="12" y1="9" y2="15" />
-      <line x1="12" x2="18" y1="9" y2="15" />
-    </svg>
-  );
-}
-
-function DownloadIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-      <polyline points="7 10 12 15 17 10" />
-      <line x1="12" x2="12" y1="15" y2="3" />
-    </svg>
-  );
-}
-
-function FilePenIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 22h6a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v10" />
-      <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-      <path d="M10.4 12.6a2 2 0 1 1 3 3L8 21l-4 1 1-4Z" />
+      <rect x="2" y="6" width="20" height="12" rx="2" ry="2"></rect>
+      <path d="M6 10h0"></path>
+      <path d="M18 10h0"></path>
+      <path d="M12 10v4"></path>
+      <path d="M9 13h6"></path>
     </svg>
   );
 }
@@ -484,10 +321,10 @@ function LayoutDashboardIcon(props: any) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <rect width="7" height="9" x="3" y="3" rx="1" />
-      <rect width="7" height="5" x="14" y="3" rx="1" />
-      <rect width="7" height="9" x="14" y="12" rx="1" />
-      <rect width="7" height="5" x="3" y="16" rx="1" />
+      <rect x="3" y="3" width="7" height="7"></rect>
+      <rect x="14" y="3" width="7" height="7"></rect>
+      <rect x="14" y="14" width="7" height="7"></rect>
+      <rect x="3" y="14" width="7" height="7"></rect>
     </svg>
   );
 }
@@ -506,49 +343,9 @@ function MenuIcon(props: any) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <line x1="4" x2="20" y1="12" y2="12" />
-      <line x1="4" x2="20" y1="6" y2="6" />
-      <line x1="4" x2="20" y1="18" y2="18" />
-    </svg>
-  );
-}
-
-function PlusIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M5 12h14" />
-      <path d="M12 5v14" />
-    </svg>
-  );
-}
-
-function SearchIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3" />
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
     </svg>
   );
 }
@@ -567,15 +364,15 @@ function UsersIcon(props: any) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-      <circle cx="9" cy="7" r="4" />
-      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      <path d="M17 21v-2a4 4 0 0 0-3-3.87"></path>
+      <path d="M7 21v-2a4 4 0 0 1 3-3.87"></path>
+      <path d="M12 10a4 4 0 0 0 0-8 4 4 0 0 0 0 8z"></path>
+      <path d="M17 8a4 4 0 1 1-8 0"></path>
     </svg>
   );
 }
 
-function XIcon(props: any) {
+function DeleteIcon(props: any) {
   return (
     <svg
       {...props}
@@ -589,8 +386,9 @@ function XIcon(props: any) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
+      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+      <line x1="9" y1="9" x2="15" y2="15"></line>
+      <line x1="15" y1="9" x2="9" y2="15"></line>
     </svg>
   );
 }

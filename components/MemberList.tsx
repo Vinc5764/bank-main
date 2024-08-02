@@ -25,44 +25,55 @@ import {
 } from "@/components/ui/pagination";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { SkeletonDemo } from "./Skeleton";
 
 export default function MemberList() {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [membersPerPage] = useState(10);
+  const [isloading, setIsLoading] = useState(false);
   const [members, setMembers] = useState([]);
   const [editingMember, setEditingMember] = useState<any>([]);
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
-        const response = await fetch(`https://bank-payment-server.onrender.com/admin/members`);
+        const response = await fetch(
+          `https://bank-payment-server.onrender.com/admin/members`
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
+
         const data = await response.json();
+        setIsLoading(false);
         setMembers(data);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setIsLoading(false);
       }
     };
 
     fetchData();
   }, []);
 
-  const handleEditCustomer = async (updatedMember:any) => {
+  const handleEditCustomer = async (updatedMember: any) => {
     console.log(updatedMember);
-    
-    try {
-      await axios.put(`https://4195-102-176-65-181.ngrok-free.app/admin/member/${updatedMember?._id}`, {
-        name: updatedMember.name,
-        email: updatedMember.email,
-        accountNumber: updatedMember.accountNumber,
-        balance: updatedMember.balance,
-        password: updatedMember.password,
-      });
 
-      const updatedMembers:any = members.map((m:any) =>
+    try {
+      await axios.put(
+        `https://4195-102-176-65-181.ngrok-free.app/admin/member/${updatedMember?._id}`,
+        {
+          name: updatedMember.name,
+          email: updatedMember.email,
+          accountNumber: updatedMember.accountNumber,
+          balance: updatedMember.balance,
+          password: updatedMember.password,
+        }
+      );
+
+      const updatedMembers: any = members.map((m: any) =>
         m._id === updatedMember._id ? updatedMember : m
       );
       setMembers(updatedMembers);
@@ -72,20 +83,20 @@ export default function MemberList() {
     }
   };
 
-  const handleDeleteCustomer = async (memberId:any) => {
+  const handleDeleteCustomer = async (memberId: any) => {
     try {
       await axios.delete(
         `https://bank-payment-server.onrender.com/users/delete/${memberId}`
       );
 
-      const updatedMembers = members.filter((m:any) => m.id !== memberId);
+      const updatedMembers = members.filter((m: any) => m.id !== memberId);
       setMembers(updatedMembers);
     } catch (error) {
       console.error("Delete failed", error);
     }
   };
 
-  const filteredMembers = members?.filter((member:any) =>
+  const filteredMembers = members?.filter((member: any) =>
     member?.email?.toLowerCase().includes(search.toLowerCase())
   );
   const indexOfLastMember = currentPage * membersPerPage;
@@ -96,11 +107,11 @@ export default function MemberList() {
   );
   const totalPages = Math.ceil(filteredMembers.length / membersPerPage);
 
-  const handlePageChange = (pageNumber:any) => {
+  const handlePageChange = (pageNumber: any) => {
     setCurrentPage(pageNumber);
   };
 
-  const handleEdit = (member:any) => {
+  const handleEdit = (member: any) => {
     setEditingMember(member);
   };
 
@@ -122,116 +133,124 @@ export default function MemberList() {
             type="text"
             placeholder="Search members..."
             value={search}
-            onChange={(e:any) => setSearch(e.target.value)}
+            onChange={(e: any) => setSearch(e.target.value)}
             className="pl-10 w-full"
           />
         </div>
       </div>
       <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Account Number</TableHead>
-              <TableHead>Balance</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {currentMembers.map((member:any) => (
-              <TableRow key={member?.id}>
-                {editingMember?._id === member?._id ? (
-                  <>
-                    <TableCell>
-                      <Input
-                        type="text"
-                        defaultValue={member.name}
-                        onChange={(e) =>
-                          setEditingMember({
-                            ...editingMember,
-                            name: e.target.value,
-                          })
-                        }
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Input
-                        type="email"
-                        defaultValue={member.email}
-                        onChange={(e) =>
-                          setEditingMember({
-                            ...editingMember,
-                            email: e.target.value,
-                          })
-                        }
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Input
-                        type="text"
-                        defaultValue={member.accountNumber}
-                        onChange={(e) =>
-                          setEditingMember({
-                            ...editingMember,
-                            accountNumber: e.target.value,
-                          })
-                        }
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Input
-                        type="number"
-                        defaultValue={member.balance}
-                        onChange={(e) =>
-                          setEditingMember({
-                            ...editingMember,
-                            balance: parseFloat(e.target.value),
-                          })
-                        }
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Button variant="outline" size="sm" onClick={handleSave}>
-                        Save
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setEditingMember(null)}
-                      >
-                        Cancel
-                      </Button>
-                    </TableCell>
-                  </>
-                ) : (
-                  <>
-                    <TableCell>{member?.name}</TableCell>
-                    <TableCell>{member?.email}</TableCell>
-                    <TableCell>{member?.accountNumber}</TableCell>
-                    <TableCell>${member?.balance?.toFixed(2)}</TableCell>
-                    <TableCell>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleEdit(member)}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDeleteCustomer(member.id)}
-                      >
-                        Delete
-                      </Button>
-                    </TableCell>
-                  </>
-                )}
+        {isloading ? (
+          <SkeletonDemo />
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Account Number</TableHead>
+                <TableHead>Balance</TableHead>
+                <TableHead>Actions</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {currentMembers.map((member: any) => (
+                <TableRow key={member?.id}>
+                  {editingMember?._id === member?._id ? (
+                    <>
+                      <TableCell>
+                        <Input
+                          type="text"
+                          defaultValue={member.name}
+                          onChange={(e) =>
+                            setEditingMember({
+                              ...editingMember,
+                              name: e.target.value,
+                            })
+                          }
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          type="email"
+                          defaultValue={member.email}
+                          onChange={(e) =>
+                            setEditingMember({
+                              ...editingMember,
+                              email: e.target.value,
+                            })
+                          }
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          type="text"
+                          defaultValue={member.accountNumber}
+                          onChange={(e) =>
+                            setEditingMember({
+                              ...editingMember,
+                              accountNumber: e.target.value,
+                            })
+                          }
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          type="number"
+                          defaultValue={member.balance}
+                          onChange={(e) =>
+                            setEditingMember({
+                              ...editingMember,
+                              balance: parseFloat(e.target.value),
+                            })
+                          }
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleSave}
+                        >
+                          Save
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setEditingMember(null)}
+                        >
+                          Cancel
+                        </Button>
+                      </TableCell>
+                    </>
+                  ) : (
+                    <>
+                      <TableCell>{member?.name}</TableCell>
+                      <TableCell>{member?.email}</TableCell>
+                      <TableCell>{member?.accountNumber}</TableCell>
+                      <TableCell>${member?.balance?.toFixed(2)}</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleEdit(member)}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDeleteCustomer(member.id)}
+                        >
+                          Delete
+                        </Button>
+                      </TableCell>
+                    </>
+                  )}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </div>
       <div className="mt-6 flex justify-end">
         <Pagination>
@@ -268,7 +287,7 @@ export default function MemberList() {
   );
 }
 
-function SearchIcon(props:any) {
+function SearchIcon(props: any) {
   return (
     <svg
       {...props}
@@ -288,7 +307,7 @@ function SearchIcon(props:any) {
   );
 }
 
-function XIcon(props:any) {
+function XIcon(props: any) {
   return (
     <svg
       {...props}

@@ -33,14 +33,11 @@ export default function Withdrawal() {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "https://bank-payment-server.onrender.com/deposit",
-        {
-          account: accountType,
-          amount,
-          email,
-        }
-      );
+      const response = await axios.post("http://localhost:3001/deposit", {
+        account: accountType,
+        amount,
+        email,
+      });
 
       console.log(response);
 

@@ -18,37 +18,97 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import useTokenStore from "@/lib/store";
+import axios from "axios";
 
 export default function CustomerHome() {
+  const [fetchData, setFetchedData] = useState<any>({});
+  const { datas } = useTokenStore();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/users/details`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const data = await response.json();
-        console.log(data);
+        const response = await axios.get(
+          `http://localhost:3001/users/reports`,
+          {
+            params: {
+              accountNumber: datas.account.accountNumber,
+            },
+          }
+        );
 
-        //  setFetchedData(data);
+        setFetchedData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
-    (async () => await fetchData())();
-  }, []);
+    fetchData();
+  }, [datas.account.accountNumber]);
+
+  const classifyTransaction = (transaction: any) => {
+    if (transaction.dateWithdrawn) {
+      return {
+        type: "Withdrawal",
+        amount: transaction.amount,
+      };
+    } else if (transaction.dateDeposited) {
+      return {
+        type: "Deposit",
+        amount: transaction.amount,
+      };
+    }
+    return {
+      type: "Unknown",
+      amount: 0,
+    };
+  };
+
+  const recentTransactions = fetchData?.allTransactions
+    ?.slice(0, 3)
+    .map((transaction: any) => {
+      const classifiedTransaction = classifyTransaction(transaction);
+      return (
+        <div
+          key={transaction._id}
+          className="flex items-center justify-between"
+        >
+          <div className="flex items-center gap-2">
+            {classifiedTransaction.type === "Deposit" ? (
+              <ArrowDownIcon className="h-5 w-5 text-green-500" />
+            ) : (
+              <ArrowUpIcon className="h-5 w-5 text-red-500" />
+            )}
+            <div>{classifiedTransaction.type}</div>
+          </div>
+          <div
+            className={
+              classifiedTransaction.type === "Deposit"
+                ? "text-green-500 font-medium"
+                : "text-red-500 font-medium"
+            }
+          >
+            {classifiedTransaction.type === "Deposit"
+              ? `+$${classifiedTransaction.amount.toFixed(2)}`
+              : `-$${classifiedTransaction.amount.toFixed(2)}`}
+          </div>
+        </div>
+      );
+    });
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <main className="flex-1 p-4 sm:p-6">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardHeader>
-              <CardTitle>Account Balance</CardTitle>
+              <CardTitle>Checking Account</CardTitle>
             </CardHeader>
             <CardContent className="flex items-center justify-between">
-              <div className="text-4xl font-bold">$0.00.</div>
+              <div className="text-4xl font-bold">
+                $ {fetchData?.totals?.checking?.toFixed(2) || 0.0}
+              </div>
               <Link
                 href="/dashboard/deposits"
                 className="text-primary"
@@ -62,17 +122,19 @@ export default function CustomerHome() {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>Pending Withdrawals</CardTitle>
+              <CardTitle>Investment</CardTitle>
             </CardHeader>
             <CardContent className="flex items-center justify-between">
-              <div className="text-4xl font-bold">$0.00</div>
+              <div className="text-4xl font-bold">
+                ${fetchData?.totals?.investing?.toFixed(2) ?? 0.0}
+              </div>
               <Link
                 href="/dashboard/withdraw"
                 className="text-primary"
                 prefetch={false}
               >
                 <Button variant="outline" size="sm">
-                  Withdraw
+                  Deposit
                 </Button>
               </Link>
             </CardContent>
@@ -82,127 +144,53 @@ export default function CustomerHome() {
               <CardTitle>Recent Transactions</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid gap-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <ArrowDownIcon className="h-5 w-5 text-green-500" />
-                    <div>Deposit</div>
-                  </div>
-                  <div className="text-green-500 font-medium">+$500.00</div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <ArrowUpIcon className="h-5 w-5 text-red-500" />
-                    <div>Withdrawal</div>
-                  </div>
-                  <div className="text-red-500 font-medium">-$200.00</div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <ArrowDownIcon className="h-5 w-5 text-green-500" />
-                    <div>Deposit</div>
-                  </div>
-                  <div className="text-green-500 font-medium">+$1,000.00</div>
-                </div>
-              </div>
+              <div className="grid gap-2">{recentTransactions}</div>
             </CardContent>
             <CardFooter>
               <Link href="#" className="text-primary" prefetch={false}>
                 View all transactions
               </Link>
             </CardFooter>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Savings Account</CardTitle>
+            </CardHeader>
+            <CardContent className="flex items-center justify-between">
+              <div className="text-4xl font-bold">
+                ${fetchData?.totals?.savings?.toFixed(2) ?? 0.0}
+              </div>
+              <Link
+                href="/dashboard/deposits"
+                className="text-primary"
+                prefetch={false}
+              >
+                <Button variant="outline" size="sm">
+                  Deposit
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Total Account Balance</CardTitle>
+            </CardHeader>
+            <CardContent className="flex items-center justify-between">
+              <div className="text-4xl font-bold">
+                ${fetchData?.totals?.checking?.toFixed(2) ?? 0.0}
+              </div>
+              <Link
+                href="/dashboard/deposits"
+                className="text-primary"
+                prefetch={false}
+              >
+                <Button variant="outline" size="sm">
+                  Deposit
+                </Button>
+              </Link>
+            </CardContent>
           </Card>
         </div>
-        {/* <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <Card>
-            <CardHeader>
-              <CardTitle>Deposit Funds</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form>
-                <div className="grid gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="amount">Amount</Label>
-                    <Input
-                      id="amount"
-                      type="number"
-                      placeholder="Enter amount"
-                    />
-                  </div>
-                  <Button type="submit" className="w-full">
-                    Deposit
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Withdraw Funds</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form>
-                <div className="grid gap-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="amount">Amount</Label>
-                    <Input
-                      id="amount"
-                      type="number"
-                      placeholder="Enter amount"
-                    />
-                  </div>
-                  <Button type="submit" className="w-full">
-                    Withdraw
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Transaction History</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <ArrowDownIcon className="h-5 w-5 text-green-500" />
-                    <div>Deposit</div>
-                  </div>
-                  <div className="text-green-500 font-medium">+$500.00</div>
-                  <div className="text-xs text-muted-foreground">
-                    2023-04-15
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <ArrowUpIcon className="h-5 w-5 text-red-500" />
-                    <div>Withdrawal</div>
-                  </div>
-                  <div className="text-red-500 font-medium">-$200.00</div>
-                  <div className="text-xs text-muted-foreground">
-                    2023-04-10
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <ArrowDownIcon className="h-5 w-5 text-green-500" />
-                    <div>Deposit</div>
-                  </div>
-                  <div className="text-green-500 font-medium">+$1,000.00</div>
-                  <div className="text-xs text-muted-foreground">
-                    2023-04-05
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Link href="#" className="text-primary" prefetch={false}>
-                View all transactions
-              </Link>
-            </CardFooter>
-          </Card>
-        </div> */}
       </main>
     </div>
   );

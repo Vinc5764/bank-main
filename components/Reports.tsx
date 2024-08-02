@@ -28,22 +28,23 @@ import {
 import axios from "axios";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { SkeletonDemo } from "./Skeleton";
 
 export default function Reports() {
-  const [transactions, setTransactions] = useState([
-    // Sample transactions data
-  ]);
+  const [transactions, setTransactions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(20);
-  const [data, setData] = useState([]);
-  const [filterDate, setFilterDate] = useState({ start: "", end: "" });
+  const [data, setData] = useState<any>([]);
+  const [filterDate, setFilterDate] = useState({ start: null, end: null });
   const [filterAmount, setFilterAmount] = useState({ min: "", max: "" });
   const [filterDescription, setFilterDescription] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
-  const categories = ["pending"];
+  const categories = ["pending", "success", "rejected"];
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get(
           `https://bank-payment-server.onrender.com/admin/reports`
@@ -51,9 +52,11 @@ export default function Reports() {
         if (!response) {
           throw new Error("Failed to fetch data");
         }
-        setData(response.data.deposits);
+        setIsLoading(false);
+        setData([...response.data.deposits, ...response.data.withdrawals]);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setIsLoading(false);
       }
     };
 
@@ -61,22 +64,25 @@ export default function Reports() {
   }, []);
 
   const filteredTransactions = useMemo(() => {
-    return data.filter((transaction: any) => {
-      const dateMatch = filterDate.start
-        ? new Date(transaction.date) >= new Date(filterDate.start) &&
-          new Date(transaction.date) <= new Date(filterDate.end)
-        : true;
+    return data.filter((transaction:any) => {
+      const date = transaction.dateDeposited || transaction.dateWithdrawn;
+      const dateMatch =
+        filterDate.start && filterDate.end
+          ? new Date(date) >= new Date(filterDate.start) &&
+            new Date(date) <= new Date(filterDate.end)
+          : true;
       const amountMatch = filterAmount.min
         ? transaction.amount >= parseFloat(filterAmount.min) &&
           transaction.amount <= parseFloat(filterAmount.max)
         : true;
       const descriptionMatch = filterDescription
-        ? transaction.description
+        ? (transaction.description || transaction.purpose || "")
             .toLowerCase()
             .includes(filterDescription.toLowerCase())
         : true;
       const categoryMatch = filterCategory
-        ? transaction.category.toLowerCase() === filterCategory.toLowerCase()
+        ? (transaction.status || "").toLowerCase() ===
+          filterCategory.toLowerCase()
         : true;
       return dateMatch && amountMatch && descriptionMatch && categoryMatch;
     });
@@ -90,32 +96,32 @@ export default function Reports() {
   );
   const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage);
 
-  const handlePageChange = (page: any) => {
+  const handlePageChange = (page:any) => {
     setCurrentPage(page);
   };
 
-  const handleDateFilter = (start: any, end: any) => {
-    setFilterDate({ start, end });
+  const handleDateFilter = (range:any) => {
+    setFilterDate({ start: range?.start, end: range?.end });
     setCurrentPage(1);
   };
 
-  const handleAmountFilter = (min: any, max: any) => {
+  const handleAmountFilter = (min:any, max:any) => {
     setFilterAmount({ min, max });
     setCurrentPage(1);
   };
 
-  const handleDescriptionFilter = (description: any) => {
+  const handleDescriptionFilter = (description:any) => {
     setFilterDescription(description);
     setCurrentPage(1);
   };
 
-  const handleCategoryFilter = (category: any) => {
+  const handleCategoryFilter = (category:any) => {
     setFilterCategory(category);
     setCurrentPage(1);
   };
 
   const handleDownload = async () => {
-    const input: any = document.querySelector(".w-full.max-w-6xl.mx-auto");
+    const input:any = document.querySelector(".w-full.max-w-6xl.mx-auto");
 
     if (input) {
       const canvas = await html2canvas(input);
@@ -165,7 +171,11 @@ export default function Reports() {
                     className="w-full justify-start font-normal"
                   >
                     {filterDate.start && filterDate.end
-                      ? `${filterDate.start} - ${filterDate.end}`
+                      ? `${new Date(
+                          filterDate.start
+                        ).toLocaleDateString()} - ${new Date(
+                          filterDate.end
+                        ).toLocaleDateString()}`
                       : "Select date range"}
                     <div className="ml-auto h-4 w-4 opacity-50" />
                   </Button>
@@ -173,9 +183,8 @@ export default function Reports() {
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="range"
-                    onSelect={(range: any) =>
-                      handleDateFilter(range.start, range.end)
-                    }
+                   
+                    onSelect={(range) => handleDateFilter(range)}
                   />
                 </PopoverContent>
               </Popover>
@@ -203,33 +212,23 @@ export default function Reports() {
                 />
               </div>
             </div>
-            {/* <div>
-              <Label htmlFor="description">Description</Label>
-              <Input
-                id="description"
-                type="text"
-                placeholder="Search description"
-                value={filterDescription}
-                onChange={(e) => handleDescriptionFilter(e.target.value)}
-              />
-            </div> */}
             <div>
               <Label htmlFor="category">Status</Label>
               <Select
                 value={filterCategory}
-                onValueChange={(e: any) => handleCategoryFilter(e.target.value)}
+                onValueChange={(value) => handleCategoryFilter(value)}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((category: any) => (
+                  {categories.map((category) => (
                     <SelectItem
-                      key={category.value}
-                      value={category.value}
-                      onClick={() => handleCategoryFilter(category.value)}
+                      key={category}
+                      value={category}
+                      onClick={() => handleCategoryFilter(category)}
                     >
-                      {category.label}
+                      {category}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -238,74 +237,72 @@ export default function Reports() {
           </div>
         </div>
         <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Account</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {currentItems.map((transaction: any) => (
-                <TableRow key={transaction?.id}>
-                  <TableCell>{transaction?.account}</TableCell>
-                  <TableCell>${transaction?.amount.toFixed(2)}</TableCell>
-                  <TableCell>{transaction?.email}</TableCell>
-                  <TableCell>
-                    <Badge
-                      className="bg-green-500 text-white"
-                      variant={
-                        transaction.status === "Approved"
-                          ? "outline"
-                          : "secondary"
-                      }
-                    >
-                      {transaction.status ?? "success"}
-                    </Badge>
-                  </TableCell>
+          {isLoading ? (
+            <SkeletonDemo />
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Account</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Status</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {currentItems.map((transaction:any) => (
+                  <TableRow key={transaction._id}>
+                    <TableCell>
+                      {new Date(
+                        transaction.dateDeposited || transaction.dateWithdrawn
+                      ).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell>{transaction.account}</TableCell>
+                    <TableCell>${transaction.amount.toFixed(2)}</TableCell>
+                    <TableCell>{transaction.email}</TableCell>
+                    <TableCell>
+                      <Badge
+                        className={`${
+                          transaction.status === "pending"
+                            ? "bg-yellow-500"
+                            : transaction.status === "success"
+                            ? " bg-red-500"
+                            : "bg-green-500"
+                        } text-white`}
+                      >
+                        {transaction.status ?? "success"}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </div>
         <div className="px-6 py-4 border-t flex items-center justify-between">
           <div className="text-muted-foreground">
-            Showing {indexOfFirstItem + 1} to {indexOfLastItem} of{" "}
-            {filteredTransactions.length} transactions
+            Page {currentPage} of {totalPages}
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex space-x-2">
             <Button
               variant="outline"
-              size="sm"
               disabled={currentPage === 1}
               onClick={() => handlePageChange(currentPage - 1)}
             >
-              <ChevronLeftIcon className="h-4 w-4" />
+              Previous
             </Button>
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <Button
-                key={page}
-                // variant={currentPage === page ? "primary" : "outline"}
-                size="sm"
-                onClick={() => handlePageChange(page)}
-              >
-                {page}
-              </Button>
-            ))}
             <Button
               variant="outline"
-              size="sm"
               disabled={currentPage === totalPages}
               onClick={() => handlePageChange(currentPage + 1)}
             >
-              <ChevronRightIcon className="h-4 w-4" />
+              Next
             </Button>
           </div>
         </div>
       </div>
-      <div className="mt-8 flex justify-end">
+      <div className="mt-4 flex justify-end">
         <Button onClick={handleDownload}>Download Report</Button>
       </div>
     </div>

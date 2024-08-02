@@ -20,8 +20,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogTrigger, DialogContent, DialogFooter, DialogClose } from "@/components/ui/dialog";
-
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import useTokenStore from "@/lib/store";
 
 export default function Withdrawal() {
   // State variables for form inputs
@@ -30,13 +36,15 @@ export default function Withdrawal() {
   const [purpose, setPurpose] = useState("");
   const [email, setEmail] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { datas } = useTokenStore();
 
-  const handleSubmit = async (e:any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("https://4195-102-176-65-181.ngrok-free.app/withdrawal", {
-        accountType,
+      const response = await axios.post("http://localhost:3001/withdrawal", {
+        account: accountType,
+        accountNumber: datas.account.accountNumber,
         amount,
         purpose,
         email,
@@ -86,11 +94,7 @@ export default function Withdrawal() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="account-type">Account Type</Label>
-                <Select
-                  
-                  value={accountType}
-                  onValueChange={setAccountType}
-                >
+                <Select value={accountType} onValueChange={setAccountType}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select account type" />
                   </SelectTrigger>
@@ -141,11 +145,15 @@ export default function Withdrawal() {
         <DialogContent className="sm:max-w-[425px]">
           <div className="flex flex-col items-center justify-center gap-4 py-8">
             <CircleCheckIcon className="w-12 h-12 text-green-500" />
-            <p className="text-lg font-medium">Withdrawal successful!</p>
+            <p className="text-lg font-medium">
+              Withdrawal initiated successfully!
+            </p>
           </div>
           <DialogFooter>
             <DialogClose asChild>
-              <Button type="button" onClick={() => setIsModalOpen(false)}>OK</Button>
+              <Button type="button" onClick={() => setIsModalOpen(false)}>
+                OK
+              </Button>
             </DialogClose>
           </DialogFooter>
         </DialogContent>
@@ -154,7 +162,7 @@ export default function Withdrawal() {
   );
 }
 
-function CreditCardIcon(props:any) {
+function CreditCardIcon(props: any) {
   return (
     <svg
       {...props}
@@ -174,22 +182,22 @@ function CreditCardIcon(props:any) {
   );
 }
 
-function CircleCheckIcon(props:any) {
-    return (
-      <svg
-        {...props}
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <circle cx="12" cy="12" r="10" />
-        <path d="m9 12 2 2 4-4" />
-      </svg>
-    )
-  }
+function CircleCheckIcon(props: any) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path d="m9 12 2 2 4-4" />
+    </svg>
+  );
+}

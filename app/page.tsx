@@ -35,7 +35,7 @@ const Page = () => {
     } else {
       r.push("/dashboard");
     }
-  }, [r]);
+  }, [token, r]);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -44,43 +44,36 @@ const Page = () => {
     setPasswordError(null);
     try {
       setIsLoading(true);
-      // const response = await axios.post("https://bank-payment-server.onrender.com/users/login", {
-      //   userid: email,
-      //   password: password,
-      // });
-      const response: any = await fetch(
-        "https://4195-102-176-65-181.ngrok-free.app/users/login",
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer f3eac184635c8886dcb0a2b1f1dcdf35b5b2ae778d1c36f95245ba58278df78222e9d5ec48532a14608d1b3c3665f9def41f`, // Add the Bearer token for authorization
-          },
-          body: JSON.stringify({
-            userid: email,
-            password: password,
-          }),
-        }
-      );
+      const response: any = await fetch("http://localhost:3001/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer f3eac184635c8886dcb0a2b1f1dcdf35b5b2ae778d1c36f95245ba58278df78222e9d5ec48532a14608d1b3c3665f9def41f`,
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
       const res = await response.json();
-      console.log(res);
 
       setIsLoading(false);
-      const token = res.token;
+      const token = res?.token;
 
-      setToken(token, res.existingUser.usertype, res.existingUser.userid);
+      setToken(token, res?.accountType, res?.account?.name, res);
 
       if (res.token) {
         r.push("/dashboard/");
       }
     } catch (error: any) {
       setIsLoading(false);
+      console.log(error);
+
       if (error.response) {
         const { status, data } = error.response;
         if (status === 404) {
-          setEmailError("User does not exist");
-        } else if (status === 401) {
+          setEmailError("This User does not exist");
+        } else if (status === 400) {
           setPasswordError("Incorrect password");
         } else {
           setError("Login failed. Please try again.");
@@ -96,7 +89,7 @@ const Page = () => {
       className="flex min-h-screen items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8 dark:bg-gray-900"
       onSubmit={handleSubmit}
     >
-      <Card className="mx-auto  max-w-sm">
+      <Card className="mx-auto max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
@@ -122,12 +115,12 @@ const Page = () => {
             <div className="grid gap-2">
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
-                <Link
+                {/* <Link
                   href={`/reset-password`}
                   className="ml-auto inline-block text-sm underline"
                 >
                   Forgot your password?
-                </Link>
+                </Link> */}
               </div>
               <Input
                 id="password"
@@ -147,9 +140,12 @@ const Page = () => {
               Login with Google
             </Button>
           </div>
+          {error && (
+            <p className="text-red-500 text-sm mt-4 text-center">{error}</p>
+          )}
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
-            <Link href={`/sign-up`} className="underline">
+            <Link href={`/sign-up/banks`} className="underline">
               Sign up
             </Link>
           </div>

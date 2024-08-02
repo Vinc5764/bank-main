@@ -23,13 +23,13 @@ import Spinner from "./Spinner";
 // import { toast, ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 
-export default function AdminDeposit() {
+export default function AdminWithdrawal() {
   // State variables for form inputs
   const [accountType, setAccountType] = useState("");
   const [amount, setAmount] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [customers, setCustomers] = useState<any>([]);
+  const [customers, setCustomers] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState("");
 
   console.log(selectedCustomer);
@@ -56,7 +56,7 @@ export default function AdminDeposit() {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:3001/deposit", {
+      const response = await axios.post("http://localhost:3001/withdrawal", {
         account: accountType,
         amount,
         email,
@@ -87,7 +87,7 @@ export default function AdminDeposit() {
       {/* <ToastContainer /> */}
       <Card>
         <CardHeader>
-          <CardTitle>Deposit Customer Funds</CardTitle>
+          <CardTitle>Withdrawal Customer Funds</CardTitle>
           <CardDescription>Enter the details for your Deposit.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
@@ -137,7 +137,7 @@ export default function AdminDeposit() {
                   <SelectValue placeholder="Select customer" />
                 </SelectTrigger>
                 <SelectContent>
-                  {customers.map((customer:any) => (
+                  {customers.map((customer: any) => (
                     <SelectItem
                       key={customer.id}
                       value={customer.accountNumber}

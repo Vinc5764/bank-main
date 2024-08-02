@@ -1,18 +1,32 @@
 "use client";
-import AdminHome from "@/components/AminHome";
+
+import React, { useEffect, useState } from "react";
+
 import CustomerHome from "@/components/CustomerHome";
 import useTokenStore from "@/lib/store";
-import React from "react";
+import AdminHome from "@/components/AminHome";
 
-const page = () => {
-  // const usertype = localStorage.getItem("usertype");
-  const {userType} = useTokenStore() 
+const HomePage = () => {
+  const { userType } = useTokenStore();
+  const [resolvedUserType, setResolvedUserType] = useState<string | null>(null);
 
-  //  const sidebar = token === "customer" ? sidebarLinksCustomer : sidebarLinks;
+  useEffect(() => {
+    // Set the resolved user type from the store when the component mounts
+    if (userType) {
+      setResolvedUserType(userType);
+    }
+  }, [userType]);
+
+  // Handle cases where userType might not be resolved immediately
+  if (resolvedUserType === null) {
+    return <div>Loading...</div>; // or any other loading indicator
+  }
 
   return (
-    <div>{userType === "customer" ? <CustomerHome /> : <AdminHome />}</div>
+    <div>
+      {resolvedUserType === "customer" ? <CustomerHome /> : <AdminHome />}
+    </div>
   );
 };
 
-export default page;
+export default HomePage;

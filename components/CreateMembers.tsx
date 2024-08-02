@@ -1,10 +1,5 @@
 "use client";
 
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/UsCx6XsExpU
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
 import Link from "next/link";
 import {
   NavigationMenu,
@@ -52,27 +47,29 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import Spinner from "./Spinner";
+import useTokenStore from "@/lib/store";
 
 export default function CreateMembers() {
-  const [userid, setUserid] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [selectedBank, setSelectedBank] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
   const [csvFile, setCsvFile] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
-
+  const [loading, setLoading] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
+  // const { token, userType, clearToken, name } = useTokenStore();
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `https://bank-payment-server.onrender.com/api/getMembers`
-        );
+        const response = await fetch(`hhttp://localhost:3001/api/getMembers`);
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
         const data = await response.json();
         console.log(data);
-
-        // setFetchedData(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -83,29 +80,27 @@ export default function CreateMembers() {
 
   const handleCreateMember = async (e: any) => {
     e.preventDefault();
-
+    setLoading(true);
     try {
-      const response = await axios.post(
-        "https://bank-payment-server.onrender.com/admin/members",
-        {
-          userid: userid,
-          email: email,
-          password: password,
-        }
-      );
+      const response = await axios.post("http://localhost:3001/admin/members", {
+        name,
+        email,
+        password,
+        accountNumber,
+      });
       const token = response.data.token;
-      // localStorage.setItem("token", token);
       console.log(response.data);
+      setLoading(false);
       setIsModalOpen(true); // Open the modal on success
-      // router.push("/"); // Redirect after successful registration
     } catch (error) {
       console.error("Sign-up failed", error);
+      setLoading(false);
     }
   };
 
   const handleCreateMembersInBulk = async (e: any) => {
     e.preventDefault();
-
+    setIsLoading(true);
     if (!csvFile) {
       console.error("No file selected");
       return;
@@ -114,24 +109,34 @@ export default function CreateMembers() {
     Papa.parse(csvFile, {
       header: true,
       complete: async (results: any) => {
-        // Filter out rows where userid is empty
-        const validData = results.data.filter((row: any) => row.userid);
+        // Filter out rows where name, email, password, selectedBank, or accountNumber is empty
+        const validData = results.data.filter(
+          (row: any) =>
+            row.name &&
+            row.email &&
+            row.password &&
+            row.selectedBank &&
+            row.accountNumber
+        );
 
         console.log("Filtered Results:", validData);
 
         try {
           const response = await axios.post(
-            "https://4195-102-176-65-181.ngrok-free.app/admin/bulkmembers",
+            "http://localhost:3001/admin/bulkmembers",
             validData
           );
           console.log("Backend Response:", response.data);
+          setIsLoading(false);
           setIsModalOpen(true); // Open the modal on success
         } catch (error) {
           console.error("Bulk upload failed", error);
+          setIsLoading(false);
         }
       },
       error: (error: any) => {
         console.error("CSV parsing error", error);
+        setIsLoading(false);
       },
     });
   };
@@ -151,12 +156,12 @@ export default function CreateMembers() {
               <form>
                 <div className="grid gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="userid">User ID</Label>
+                    <Label htmlFor="name">Name</Label>
                     <Input
-                      id="userid"
-                      value={userid}
-                      onChange={(e) => setUserid(e.target.value)}
-                      placeholder="Enter user ID"
+                      id="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Enter name"
                     />
                   </div>
                   <div className="space-y-2">
@@ -179,12 +184,30 @@ export default function CreateMembers() {
                       placeholder="Enter password"
                     />
                   </div>
+                  {/* <div className="space-y-2">
+                    <Label htmlFor="selectedBank">Selected Bank</Label>
+                    <Input
+                      id="selectedBank"
+                      value={selectedBank}
+                      onChange={(e) => setSelectedBank(e.target.value)}
+                      placeholder="Enter selected bank"
+                    />
+                  </div> */}
+                  <div className="space-y-2">
+                    <Label htmlFor="accountNumber">Account Number</Label>
+                    <Input
+                      id="accountNumber"
+                      value={accountNumber}
+                      onChange={(e) => setAccountNumber(e.target.value)}
+                      placeholder="Enter account number"
+                    />
+                  </div>
                 </div>
               </form>
             </CardContent>
             <CardFooter>
               <Button onClick={handleCreateMember} className="w-full">
-                Create Member
+                {loading ? <Spinner /> : "Create Member"}
               </Button>
             </CardFooter>
           </Card>
@@ -211,7 +234,7 @@ export default function CreateMembers() {
             </CardContent>
             <CardFooter>
               <Button onClick={handleCreateMembersInBulk} className="w-full">
-                Upload and Create Members
+                {isloading ? <Spinner /> : "Upload and Create Members"}
               </Button>
             </CardFooter>
           </Card>
@@ -236,12 +259,6 @@ export default function CreateMembers() {
   );
 }
 
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/qtFhYqwDhEd
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
-
 function CircleCheckIcon(props: any) {
   return (
     <svg
@@ -258,107 +275,6 @@ function CircleCheckIcon(props: any) {
     >
       <circle cx="12" cy="12" r="10" />
       <path d="m9 12 2 2 4-4" />
-    </svg>
-  );
-}
-
-// function XIcon(props:any) {
-//   return (
-//     <svg
-//       {...props}
-//       xmlns="http://www.w3.org/2000/svg"
-//       width="24"
-//       height="24"
-//       viewBox="0 0 24 24"
-//       fill="none"
-//       stroke="currentColor"
-//       strokeWidth="2"
-//       strokeLinecap="round"
-//       strokeLinejoin="round"
-//     >
-//       <path d="M18 6 6 18" />
-//       <path d="m6 6 12 12" />
-//     </svg>
-//   )
-// }
-
-function FilePenIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 22h6a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v10" />
-      <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-      <path d="M10.4 12.6a2 2 0 1 1 3 3L8 21l-4 1 1-4Z" />
-    </svg>
-  );
-}
-
-function MountainIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
-    </svg>
-  );
-}
-
-function TrashIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 6h18" />
-      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-    </svg>
-  );
-}
-
-function XIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
     </svg>
   );
 }
