@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import useTokenStore from "@/lib/store";
 import axios from "axios";
-import CurrentTariffsSkeleton from "./DashSkele";
+import Current from "./current";
 
 export default function CustomerHome() {
   const [fetchData, setFetchedData] = useState<any>({});
@@ -105,7 +105,7 @@ export default function CustomerHome() {
     <div className="flex min-h-screen w-full flex-col bg-background">
       <main className="flex-1 p-4 sm:p-6">
         {isloading ? (
-          <CurrentTariffsSkeleton />
+          <Current />
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <Card>
@@ -116,7 +116,7 @@ export default function CustomerHome() {
                 <div className="text-4xl font-bold">
                   $ {fetchData?.totals?.checking?.toFixed(2) || 0.0}
                 </div>
-                <Link
+                {/* <Link
                   href="/dashboard/deposits"
                   className="text-primary"
                   prefetch={false}
@@ -124,18 +124,18 @@ export default function CustomerHome() {
                   <Button variant="outline" size="sm">
                     Deposit
                   </Button>
-                </Link>
+                </Link> */}
               </CardContent>
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>Investment</CardTitle>
+                <CardTitle>Investment Account</CardTitle>
               </CardHeader>
               <CardContent className="flex items-center justify-between">
                 <div className="text-4xl font-bold">
                   ${fetchData?.totals?.investing?.toFixed(2) ?? 0.0}
                 </div>
-                <Link
+                {/* <Link
                   href="/dashboard/withdraw"
                   className="text-primary"
                   prefetch={false}
@@ -143,7 +143,7 @@ export default function CustomerHome() {
                   <Button variant="outline" size="sm">
                     Deposit
                   </Button>
-                </Link>
+                </Link> */}
               </CardContent>
             </Card>
             <Card>
@@ -167,15 +167,6 @@ export default function CustomerHome() {
                 <div className="text-4xl font-bold">
                   ${fetchData?.totals?.savings?.toFixed(2) ?? 0.0}
                 </div>
-                <Link
-                  href="/dashboard/deposits"
-                  className="text-primary"
-                  prefetch={false}
-                >
-                  <Button variant="outline" size="sm">
-                    Deposit
-                  </Button>
-                </Link>
               </CardContent>
             </Card>
             <Card>
@@ -193,6 +184,15 @@ export default function CustomerHome() {
                 >
                   <Button variant="outline" size="sm">
                     Deposit
+                  </Button>
+                </Link>
+                <Link
+                  href="/dashboard/withdraw"
+                  className="text-primary"
+                  prefetch={false}
+                >
+                  <Button variant="outline" size="sm">
+                    withdraw
                   </Button>
                 </Link>
               </CardContent>

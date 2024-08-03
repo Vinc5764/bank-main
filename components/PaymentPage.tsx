@@ -59,8 +59,8 @@ export default function Withdrawal() {
   };
 
   return (
-    <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto p-6">
-      <Card>
+    <div className="grid  gap-8   items-center justify-center mx-auto p-6">
+      {/* <Card>
         <CardHeader>
           <CardTitle>Your Card</CardTitle>
         </CardHeader>
@@ -81,7 +81,7 @@ export default function Withdrawal() {
             <div>12/24</div>
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
       <Card>
         <CardHeader>
           <CardTitle>Deposit Funds</CardTitle>
@@ -125,7 +125,7 @@ export default function Withdrawal() {
               />
             </div>
             <Button type="submit" size="lg" disabled={loading}>
-              {loading ? <Spinner /> : "Withdraw"}
+              {loading ? <Spinner /> : "Deposit"}
             </Button>
           </form>
         </CardContent>

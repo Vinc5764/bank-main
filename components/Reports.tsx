@@ -29,6 +29,8 @@ import axios from "axios";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { SkeletonDemo } from "./Skeleton";
+import Image from "next/image";
+import nodataimage from "@/public/last image.png";
 
 export default function Reports() {
   const [transactions, setTransactions] = useState([]);
@@ -46,9 +48,7 @@ export default function Reports() {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(
-          `https://bank-payment-server.onrender.com/admin/reports`
-        );
+        const response = await axios.get(`http://localhost:3001/admin/reports`);
         if (!response) {
           throw new Error("Failed to fetch data");
         }
@@ -238,6 +238,15 @@ export default function Reports() {
         <div className="overflow-x-auto">
           {isLoading ? (
             <SkeletonDemo />
+          ) : currentItems.length === 0 ? (
+            <div className="flex flex-col my-8 gap-y-8 items-center justify-center">
+              <Image
+                src={nodataimage}
+                alt="No data fetched"
+                className="w-1/3 lg:w-1/12"
+              />
+              <p className="text-xl font-bold">No data fetched</p>
+            </div>
           ) : (
             <Table>
               <TableHeader>
@@ -258,7 +267,7 @@ export default function Reports() {
                       ).toLocaleDateString()}
                     </TableCell>
                     <TableCell>{transaction.account}</TableCell>
-                    <TableCell>${transaction.amount.toFixed(2)}</TableCell>
+                    <TableCell>${transaction.amount?.toFixed(2)}</TableCell>
                     <TableCell>{transaction.email}</TableCell>
                     <TableCell>
                       <Badge
@@ -266,11 +275,11 @@ export default function Reports() {
                           transaction.status === "pending"
                             ? "bg-yellow-500"
                             : transaction.status === "success"
-                            ? " bg-red-500"
-                            : "bg-green-500"
+                            ? " bg-green-500"
+                            : "bg-red-500"
                         } text-white`}
                       >
-                        {transaction.status ?? "success"}
+                        {transaction.status ?? "rejected"}
                       </Badge>
                     </TableCell>
                   </TableRow>

@@ -31,6 +31,8 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import useTokenStore from "@/lib/store";
 import { SkeletonDemo } from "./Skeleton";
+import noDataImage from "@/public/last image.png"; // Update the path as needed
+import Image from "next/image";
 
 export default function CustomerReport() {
   const [transactions, setTransactions] = useState([]);
@@ -66,9 +68,11 @@ export default function CustomerReport() {
           throw new Error("Failed to fetch data");
         }
         setIsLoading(false);
-        setData(response.data.allTransactions);
+        setData(response.data.allTransactions || []);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setIsLoading(false);
+        setData([]); // Ensure data is set to an empty array in case of error
       }
     };
 
@@ -265,6 +269,15 @@ export default function CustomerReport() {
         <div className="overflow-x-auto">
           {isloading ? (
             <SkeletonDemo />
+          ) : filteredTransactions?.length === 0 ? (
+            <div className="flex  my-8 flex-col gap-y-8 justify-center items-center ">
+              <Image
+                src={noDataImage}
+                alt="No data fetched"
+                className="w-1/3 lg:w-1/12"
+              />
+              <p className="text-xl font-bold">No Transactions Available</p>
+            </div>
           ) : (
             <Table>
               <TableHeader>

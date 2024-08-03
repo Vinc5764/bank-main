@@ -28,6 +28,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import useTokenStore from "@/lib/store";
+import Spinner from "./Spinner";
 
 export default function Withdrawal() {
   // State variables for form inputs
@@ -37,10 +38,11 @@ export default function Withdrawal() {
   const [email, setEmail] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { datas } = useTokenStore();
+  const [isloading, setIsloading] = useState(false);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
+    setIsloading(true);
     try {
       const response = await axios.post(
         "https://9a14-197-251-205-122.ngrok-free.app/withdrawal",
@@ -52,7 +54,7 @@ export default function Withdrawal() {
           email,
         }
       );
-
+      setIsloading(false);
       console.log("Withdrawal successful:", response.data);
       setIsModalOpen(true); // Open the modal on successful request
     } catch (error) {
@@ -62,8 +64,8 @@ export default function Withdrawal() {
   };
 
   return (
-    <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto p-6">
-      <Card>
+    <div className="grid  gap-8 items-center justify-center  mx-auto p-6">
+      {/* <Card>
         <CardHeader>
           <CardTitle>Your Card</CardTitle>
         </CardHeader>
@@ -84,7 +86,7 @@ export default function Withdrawal() {
             <div>12/24</div>
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
       <Card>
         <CardHeader>
           <CardTitle>Withdraw Funds</CardTitle>
@@ -139,7 +141,7 @@ export default function Withdrawal() {
               />
             </div>
             <Button type="submit" size="lg">
-              Withdraw
+              {isloading ? <Spinner /> : "withdraw"}
             </Button>
           </form>
         </CardContent>
@@ -150,6 +152,7 @@ export default function Withdrawal() {
             <CircleCheckIcon className="w-12 h-12 text-green-500" />
             <p className="text-lg font-medium">
               Withdrawal initiated successfully!
+              Wait for Approval
             </p>
           </div>
           <DialogFooter>

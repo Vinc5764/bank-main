@@ -26,6 +26,8 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { SkeletonDemo } from "./Skeleton";
+import Image from "next/image";
+import nodataImage from "@/public/last image.png";
 
 export default function MemberList() {
   const [search, setSearch] = useState("");
@@ -141,6 +143,15 @@ export default function MemberList() {
       <div className="overflow-x-auto">
         {isloading ? (
           <SkeletonDemo />
+        ) : currentMembers.length === 0 ? (
+          <div className="flex flex-col my-8 gap-y-8 items-center justify-center">
+            <Image
+              src={nodataImage}
+              alt="No data fetched"
+              className="w-1/3 lg:w-1/12"
+            />
+            <p className="text-xl font-bold">No data fetched</p>
+          </div>
         ) : (
           <Table>
             <TableHeader>

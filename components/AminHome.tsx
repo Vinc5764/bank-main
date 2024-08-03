@@ -36,6 +36,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import CurrentTariffsSkeleton from "./DashSkele";
 import { SkeletonDemo } from "./Skeleton";
+import noDataImage from "@/public/last image.png"; // Assuming you have this image in your public folder
+import Image from "next/image";
 
 export default function AdminHome() {
   const [reports, setReports] = useState([]);
@@ -55,12 +57,12 @@ export default function AdminHome() {
         setIsLoading(false);
         setResults(response.data);
 
-        const combinedReports:any = [
-          ...res.data.deposits.map((deposit:any) => ({
+        const combinedReports: any = [
+          ...res.data.deposits.map((deposit: any) => ({
             ...deposit,
             type: "Deposit",
           })),
-          ...res.data.withdrawals.map((withdrawal:any) => ({
+          ...res.data.withdrawals.map((withdrawal: any) => ({
             ...withdrawal,
             type: "Withdrawal",
           })),
@@ -167,7 +169,7 @@ export default function AdminHome() {
                     </CardHeader>
                     <CardContent>
                       <div className="text-4xl font-semibold">
-                        {results.users}
+                        {results.users ?? 0}
                       </div>
                     </CardContent>
                   </Card>
@@ -177,7 +179,9 @@ export default function AdminHome() {
                     </CardHeader>
                     <CardContent>
                       <div className="text-4xl font-semibold">
-                        ${results?.totalWithdrawals + results?.totalDeposits}
+                        $
+                        {results?.totalWithdrawals + results?.totalDeposits ??
+                          0}
                       </div>
                     </CardContent>
                   </Card>
@@ -187,7 +191,7 @@ export default function AdminHome() {
                     </CardHeader>
                     <CardContent>
                       <div className="text-4xl font-semibold">
-                        ${results?.totalDeposits}
+                        ${results?.totalDeposits ?? 0}
                       </div>
                     </CardContent>
                   </Card>
@@ -212,6 +216,15 @@ export default function AdminHome() {
             <CardContent>
               {isLoading ? (
                 <SkeletonDemo />
+              ) : reports.length === 0 ? (
+                <div className="flex flex-col my-8 gap-y-8 items-center justify-center">
+                  <Image
+                    src={noDataImage}
+                    alt="No data fetched"
+                    className="w-1/3 lg:w-1/12"
+                  />
+                  <p className="text-xl font-bold">No data fetched</p>
+                </div>
               ) : (
                 <Table>
                   <TableHeader>
@@ -241,14 +254,15 @@ export default function AdminHome() {
                         </TableCell>
                         <TableCell>
                           <Badge
-                            className=" bg-green-500 text-white"
-                            variant={
-                              transaction.status === "Approved"
-                                ? "outline"
-                                : "secondary"
-                            }
+                            className={`${
+                              transaction.status === "pending"
+                                ? "bg-yellow-500"
+                                : transaction.status === "success"
+                                ? " bg-green-500"
+                                : "bg-red-500"
+                            } text-white`}
                           >
-                            {transaction.status ?? "success"}
+                            {transaction.status ?? "rejected"}
                           </Badge>
                         </TableCell>
                       </TableRow>
@@ -277,9 +291,9 @@ function ActivityIcon(props: any) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      className="lucide lucide-activity"
     >
-      <path d="M22 12h-2.48a2 2 0 0 1-1.77-1.06l-3.27-6.11a2 2 0 0 0-1.77-1.06h-.18a2 2 0 0 0-1.77 1.06L7.88 8.94a2 2 0 0 1-1.77 1.06H2"></path>
-      <polyline points="12 3 12 12 15 9 18 12"></polyline>
+      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
     </svg>
   );
 }
@@ -297,12 +311,11 @@ function BanknoteIcon(props: any) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      className="lucide lucide-banknote"
     >
-      <rect x="2" y="6" width="20" height="12" rx="2" ry="2"></rect>
-      <path d="M6 10h0"></path>
-      <path d="M18 10h0"></path>
-      <path d="M12 10v4"></path>
-      <path d="M9 13h6"></path>
+      <rect width="20" height="12" x="2" y="6" rx="2" ry="2" />
+      <circle cx="12" cy="12" r="2" />
+      <path d="M6 12h.01M18 12h.01" />
     </svg>
   );
 }
@@ -320,11 +333,12 @@ function LayoutDashboardIcon(props: any) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      className="lucide lucide-layout-dashboard"
     >
-      <rect x="3" y="3" width="7" height="7"></rect>
-      <rect x="14" y="3" width="7" height="7"></rect>
-      <rect x="14" y="14" width="7" height="7"></rect>
-      <rect x="3" y="14" width="7" height="7"></rect>
+      <rect width="7" height="9" x="3" y="3" rx="1" />
+      <rect width="7" height="5" x="14" y="3" rx="1" />
+      <rect width="7" height="9" x="14" y="12" rx="1" />
+      <rect width="7" height="5" x="3" y="16" rx="1" />
     </svg>
   );
 }
@@ -342,10 +356,11 @@ function MenuIcon(props: any) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      className="lucide lucide-menu"
     >
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
+      <line x1="4" x2="20" y1="12" y2="12" />
+      <line x1="4" x2="20" y1="6" y2="6" />
+      <line x1="4" x2="20" y1="18" y2="18" />
     </svg>
   );
 }
@@ -363,11 +378,12 @@ function UsersIcon(props: any) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      className="lucide lucide-users"
     >
-      <path d="M17 21v-2a4 4 0 0 0-3-3.87"></path>
-      <path d="M7 21v-2a4 4 0 0 1 3-3.87"></path>
-      <path d="M12 10a4 4 0 0 0 0-8 4 4 0 0 0 0 8z"></path>
-      <path d="M17 8a4 4 0 1 1-8 0"></path>
+      <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
     </svg>
   );
 }
@@ -385,10 +401,13 @@ function DeleteIcon(props: any) {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
+      className="lucide lucide-trash"
     >
-      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-      <line x1="9" y1="9" x2="15" y2="15"></line>
-      <line x1="15" y1="9" x2="9" y2="15"></line>
+      <path d="M3 6h18" />
+      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+      <path d="M10 11v6" />
+      <path d="M14 11v6" />
+      <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
     </svg>
   );
 }
