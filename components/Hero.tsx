@@ -7,16 +7,16 @@ import link from "@/public/Vector.svg";
 import yt from "@/public/youtube.svg";
 import call from "@/public/call.svg";
 import Link from "next/link";
-import logo from '../public/png/logo-no-background.png'
+import logo from "../public/png/logo-no-background.png";
 
 const Hero: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       <header className="flex items-center justify-between px-8 py-4 bg-white">
-        <div className="w-[12rem] font-bold text-pink-600">
-          <Image src={logo} alt="logo"/>
+        <div className="w-[12rem] z-50 font-bold text-pink-600">
+          <Image src={logo} alt="logo" />
         </div>
-        <nav className="hidden md:block z-40">
+        <nav className="hidden md:block md:z-40">
           <ul className="flex space-x-6">
             {["RETAIL", "SME", "CORPORATE", "ABOUT US"].map((item) => (
               <li
@@ -29,12 +29,16 @@ const Hero: React.FC = () => {
           </ul>
         </nav>
         <div className="flex items-center z-[50] space-x-4">
-          <button className="px-4 py-3 text-sm font-bold text-white bg-pink-500 rounded-full hover:bg-pink-600">
-            Register
-          </button>
-          <button className="px-4  py-2 border border-pink-500 text-pink-500 font-bold rounded-full hover:bg-pink-50">
-            Sign In
-          </button>
+          <Link href="/sign-up/banks">
+            <button className="px-4 py-3 hidden md:block text-sm font-bold text-white bg-pink-500 rounded-full hover:bg-pink-600">
+              Register
+            </button>
+          </Link>
+          <Link href="/sign-in">
+            <button className="px-4   py-2 border border-pink-500 text-pink-500 font-bold rounded-full hover:bg-pink-50">
+              Sign In
+            </button>
+          </Link>
         </div>
       </header>
 
@@ -49,13 +53,13 @@ const Hero: React.FC = () => {
           </p>
           <div className="flex space-x-4 px-5 mb-8">
             <Link href="/sign-in">
-              <button className="px-6 py-3 bg-pink-500 text-white font-bold rounded-full hover:bg-pink-600">
+              <button className="md:px-6 px-4 text-sm py-4 bg-pink-500 text-white font-bold rounded-full hover:bg-pink-600">
                 APPLY ONLINE
               </button>
             </Link>
 
             <Link href="/sign-up/banks">
-              <button className="px-6 py-3 border border-pink-500 text-pink-500 font-bold rounded-full hover:bg-pink-50">
+              <button className="md:px-6 px-3 py-3 border border-pink-500 text-pink-500 font-bold rounded-full hover:bg-pink-50">
                 GET STARTED
               </button>
             </Link>
