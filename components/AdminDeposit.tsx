@@ -56,15 +56,12 @@ export default function AdminDeposit() {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "https://9a14-197-251-205-122.ngrok-free.app/deposit",
-        {
-          account: accountType,
-          amount,
-          email,
-          accountNumber: selectedCustomer,
-        }
-      );
+      const response = await axios.post("http://localhost:3001/deposit", {
+        account: accountType,
+        amount,
+        email,
+        accountNumber: selectedCustomer,
+      });
 
       console.log(response);
 

@@ -39,7 +39,7 @@ export default function AdminWithdrawal() {
     async function fetchCustomers() {
       try {
         const response = await axios.get(
-          "https://bank-payment-server.onrender.com/admin/members"
+          "http://localhost:3001/admin/members"
         );
         setCustomers(response.data);
       } catch (error) {

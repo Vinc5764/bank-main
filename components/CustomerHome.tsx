@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import useTokenStore from "@/lib/store";
 import axios from "axios";
-import Current from "./current";
+import Current from "./Current";
 
 export default function CustomerHome() {
   const [fetchData, setFetchedData] = useState<any>({});
@@ -70,7 +70,7 @@ export default function CustomerHome() {
   };
 
   const recentTransactions = fetchData?.allTransactions
-    ?.slice(0, 3)
+    ?.slice(-3)
     .map((transaction: any) => {
       const classifiedTransaction = classifyTransaction(transaction);
       return (

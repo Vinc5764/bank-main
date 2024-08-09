@@ -56,7 +56,7 @@ export default function Signup() {
 
     try {
       const response = await fetch(
-        "https://9a14-197-251-205-122.ngrok-free.app/bank/",
+        "https://bank-payment-server.onrender.com/bank/signup",
         {
           method: "POST",
           headers: {
