@@ -94,7 +94,9 @@ const Page = () => {
     >
       <Card className="mx-auto max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500">
+            Login
+          </CardTitle>
           <CardDescription>
             Enter your email below to login to your account
           </CardDescription>
@@ -108,7 +110,9 @@ const Page = () => {
                 type="text"
                 placeholder="simon123"
                 onChange={(e) => setEmail(e.target.value)}
-                className={emailError ? "border-red-500" : ""}
+                className={`${
+                  emailError ? "border-red-500" : "border-transparent"
+                } focus:border-transparent focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50`}
                 required
               />
               {emailError && (
@@ -118,28 +122,30 @@ const Page = () => {
             <div className="grid gap-2">
               <div className="flex items-center">
                 <Label htmlFor="password">Password</Label>
-                {/* <Link
-                  href={`/reset-password`}
-                  className="ml-auto inline-block text-sm underline"
-                >
-                  Forgot your password?
-                </Link> */}
               </div>
               <Input
                 id="password"
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
-                className={passwordError ? "border-red-500" : ""}
+                className={`${
+                  passwordError ? "border-red-500" : "border-transparent"
+                }`}
                 required
               />
               {passwordError && (
                 <p className="text-red-500 text-sm mt-1">{passwordError}</p>
               )}
             </div>
-            <Button type="submit" className="w-full">
+            <Button
+              type="submit"
+              className="w-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 text-white"
+            >
               {isLoading ? <Spinner /> : "Login"}
             </Button>
-            <Button variant="outline" className="w-full">
+            <Button
+              variant="outline"
+              className="w-full border border-transparent text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500"
+            >
               Login with Google
             </Button>
           </div>
@@ -148,7 +154,10 @@ const Page = () => {
           )}
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
-            <Link href={`/sign-up/banks`} className="underline">
+            <Link
+              href={`/sign-up/banks`}
+              className="underline text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500"
+            >
               Sign up
             </Link>
           </div>

@@ -6,6 +6,7 @@ import Newsletter from "@/components/Newsletter";
 import OurBestResults from "@/components/OurBestResults";
 import Partners from "@/components/Partners";
 import OurServices from "@/components/Services";
+import TeamSection from "@/components/TeamSection";
 import React from "react";
 
 const page = () => {
@@ -17,6 +18,7 @@ const page = () => {
       <Glance />
       <OurServices />
       <OurBestResults />
+      <TeamSection />
       <Newsletter />
       <Footers />
     </div>
