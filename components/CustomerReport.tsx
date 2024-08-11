@@ -77,7 +77,7 @@ export default function CustomerReport() {
     };
 
     fetchData();
-  }, [datas.account.accountNumber]);
+  }, [datas?.account?.accountNumber]);
 
   const filteredTransactions = useMemo(() => {
     return data?.filter((transaction: any) => {
@@ -293,7 +293,7 @@ export default function CustomerReport() {
                 {currentItems?.map((transaction: any) => (
                   <TableRow key={transaction?._id}>
                     <TableCell>{transaction?.accountNumber}</TableCell>
-                    <TableCell>${transaction?.amount.toFixed(2)}</TableCell>
+                    <TableCell>${transaction?.amount?.toFixed(2)}</TableCell>
                     <TableCell>{transaction?.account}</TableCell>
                     <TableCell>
                       <Badge

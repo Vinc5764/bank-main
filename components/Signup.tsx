@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-// Import useRouter from next/router
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,7 +19,7 @@ export default function Signup() {
     address: "",
   });
   const [loading, setLoading] = useState(false);
-  const router = useRouter(); // Initialize useRouter
+  const router = useRouter();
 
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
@@ -81,13 +80,13 @@ export default function Signup() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
+    <div className="flex min-h-screen items-center justify-center bg-white px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-primary-foreground">
+          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
             Sign up your bank
           </h2>
-          <p className="mt-2 text-center text-sm text-muted-foreground">
+          <p className="mt-2 text-center text-sm text-gray-600">
             Join our platform and start accepting payments today.
           </p>
         </div>
@@ -106,7 +105,7 @@ export default function Signup() {
               placeholder="Bank Name"
               value={formData.name}
               onChange={handleInputChange}
-              className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-primary-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+              className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-primary-foreground placeholder-gray-700 focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
             />
           </div>
           <div>
@@ -122,7 +121,7 @@ export default function Signup() {
               placeholder="Email address"
               value={formData.email}
               onChange={handleInputChange}
-              className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-primary-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+              className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-primary-foreground placeholder-gray-700 focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
             />
           </div>
           <div>
@@ -138,7 +137,7 @@ export default function Signup() {
               placeholder="Password"
               value={formData.password}
               onChange={handleInputChange}
-              className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-primary-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+              className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-primary-foreground placeholder-gray-700 focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
             />
           </div>
           <div>
@@ -154,7 +153,7 @@ export default function Signup() {
               placeholder="Phone Number"
               value={formData.phoneNumber}
               onChange={handleInputChange}
-              className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-primary-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+              className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-primary-foreground placeholder-gray-700 focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
             />
           </div>
           <div>
@@ -169,13 +168,13 @@ export default function Signup() {
               placeholder="Address"
               value={formData.address}
               onChange={handleInputChange}
-              className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-primary-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+              className="relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-primary-foreground placeholder-gray-700 focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
             />
           </div>
           <div>
             <Label
               htmlFor="permit"
-              className="block text-sm font-medium text-primary-foreground"
+              className="block text-sm font-medium text-gray-700"
             >
               Upload permit
             </Label>
@@ -189,17 +188,17 @@ export default function Signup() {
                     height={200}
                     className="mb-4 max-h-[200px] rounded-md object-contain"
                   />
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-gray-600">
                     {file.name} ({file.size} bytes)
                   </p>
                 </div>
               ) : (
                 <div className="space-y-1 text-center">
-                  <UploadIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-                  <div className="flex text-sm text-muted-foreground">
+                  <UploadIcon className="mx-auto h-12 w-12 text-gray-400" />
+                  <div className="flex text-sm text-gray-600">
                     <label
                       htmlFor="permit"
-                      className="relative cursor-pointer rounded-md bg-white font-medium text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 hover:text-primary-foreground"
+                      className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500"
                     >
                       <span>Upload a file</span>
                       <Input
@@ -212,7 +211,7 @@ export default function Signup() {
                     </label>
                     <p className="pl-1">or drag and drop</p>
                   </div>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-gray-500">
                     PNG, JPG, GIF up to 10MB
                   </p>
                 </div>
@@ -220,7 +219,10 @@ export default function Signup() {
             </div>
           </div>
           <div>
-            <Button type="submit" className="w-full">
+            <Button
+              type="submit"
+              className="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white"
+            >
               {loading ? <Spinner /> : "Sign Up"}
             </Button>
           </div>
@@ -265,8 +267,8 @@ function XIcon(props: any) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
     </svg>
   );
 }

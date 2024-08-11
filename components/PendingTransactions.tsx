@@ -141,7 +141,10 @@ export default function PendingTransaction() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Pending Withdrawals</h1>
+       
+        <h2 className="mt-6  text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
+          Pending Withdrawals
+        </h2>
         <div className="flex items-center gap-4">
           <Input
             placeholder="Search..."

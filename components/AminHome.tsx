@@ -49,9 +49,11 @@ export default function AdminHome() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/admin/homepage`
+          `https://bank-payment-server.onrender.com/admin/homepage`
         );
-        const res = await axios.get(`http://localhost:3001/admin/reports`);
+        const res = await axios.get(
+          `https://bank-payment-server.onrender.com/admin/reports`
+        );
         setIsLoading(false);
         setResults(response.data);
 
@@ -83,7 +85,7 @@ export default function AdminHome() {
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+      {/* <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
         <Sheet>
           <SheetTrigger asChild>
             <Button size="icon" variant="outline" className="sm:hidden">
@@ -107,7 +109,9 @@ export default function AdminHome() {
                 prefetch={false}
               >
                 <LayoutDashboardIcon className="h-5 w-5" />
-                Dashboard
+                <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
+                  Dasshboard
+                </h2>
               </Link>
               <Link
                 href="#"
@@ -146,12 +150,16 @@ export default function AdminHome() {
             <DropdownMenuItem>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </header>
+      </header> */}
       <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
         <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
           <Card>
             <CardHeader>
-              <CardTitle>Dashboard</CardTitle>
+              <CardTitle>
+                <h2 className="mt-6  text-2xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
+                    Dashboard
+                </h2>
+              </CardTitle>
               <CardDescription>
                 Overview of your bank's activity and member details.
               </CardDescription>

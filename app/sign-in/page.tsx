@@ -104,15 +104,15 @@ const Page = () => {
         <CardContent>
           <div className="grid gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="email">User Id</Label>
+              <Label htmlFor="email">Email</Label>
               <Input
                 id="text"
-                type="text"
-                placeholder="simon123"
+                type="email"
+                placeholder="simon123@gmail.com"
                 onChange={(e) => setEmail(e.target.value)}
                 className={`${
                   emailError ? "border-red-500" : "border-transparent"
-                } focus:border-transparent focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50`}
+                } relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-primary-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm`}
                 required
               />
               {emailError && (
@@ -129,7 +129,7 @@ const Page = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className={`${
                   passwordError ? "border-red-500" : "border-transparent"
-                }`}
+                } relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-primary-foreground placeholder-muted-foreground focus:z-10 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm`}
                 required
               />
               {passwordError && (
@@ -142,12 +142,12 @@ const Page = () => {
             >
               {isLoading ? <Spinner /> : "Login"}
             </Button>
-            <Button
+            {/* <Button
               variant="outline"
               className="w-full border border-transparent text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500"
             >
               Login with Google
-            </Button>
+            </Button> */}
           </div>
           {error && (
             <p className="text-red-500 text-sm mt-4 text-center">{error}</p>
@@ -155,10 +155,10 @@ const Page = () => {
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
             <Link
-              href={`/sign-up/banks`}
+              href={`/sign-up/`}
               className="underline text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500"
             >
-              Sign up
+              Apply
             </Link>
           </div>
         </CardContent>

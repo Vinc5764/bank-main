@@ -154,7 +154,11 @@ export default function Reports() {
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold">Transaction Report</h1>
+        <h1 className="text-3xl font-bold">
+          <h2 className="mt-6  text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
+            Transaction Report
+          </h2>
+        </h1>
         <p className="text-muted-foreground">
           View and filter your recent transactions.
         </p>
@@ -311,7 +315,12 @@ export default function Reports() {
         </div>
       </div>
       <div className="mt-4 flex justify-end">
-        <Button onClick={handleDownload}>Download Report</Button>
+        <Button
+          className=" bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 text-white"
+          onClick={handleDownload}
+        >
+          Download Report
+        </Button>
       </div>
     </div>
   );

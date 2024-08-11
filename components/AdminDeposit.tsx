@@ -87,7 +87,11 @@ export default function AdminDeposit() {
       {/* <ToastContainer /> */}
       <Card>
         <CardHeader>
-          <CardTitle>Deposit Customer Funds</CardTitle>
+          <CardTitle>
+            <h2 className="mt-6  text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
+              Deposit Customer Funds
+            </h2>
+          </CardTitle>
           <CardDescription>Enter the details for your Deposit.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
@@ -148,7 +152,12 @@ export default function AdminDeposit() {
                 </SelectContent>
               </Select>
             </div>
-            <Button type="submit" size="lg" disabled={loading}>
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 text-white"
+              disabled={loading}
+            >
               {loading ? <Spinner /> : "Deposit"}
             </Button>
           </form>

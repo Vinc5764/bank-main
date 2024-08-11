@@ -152,7 +152,11 @@ export default function CreateMembers() {
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2">
           <Card>
             <CardHeader>
-              <CardTitle>Create Member</CardTitle>
+              <CardTitle>
+                <h2 className="mt-6  text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
+                  Create Member
+                </h2>
+              </CardTitle>
               <CardDescription>
                 Add a new member to your organization.
               </CardDescription>
@@ -211,14 +215,21 @@ export default function CreateMembers() {
               </form>
             </CardContent>
             <CardFooter>
-              <Button onClick={handleCreateMember} className="w-full">
+              <Button
+                onClick={handleCreateMember}
+                className="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white"
+              >
                 {loading ? <Spinner /> : "Create Member"}
               </Button>
             </CardFooter>
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>Bulk Create Members</CardTitle>
+              <CardTitle>
+                <h2 className="mt-6  text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
+                  Bulk Create Members
+                </h2>
+              </CardTitle>
               <CardDescription>
                 Upload a CSV file to create multiple members at once.
               </CardDescription>
@@ -238,7 +249,10 @@ export default function CreateMembers() {
               </form>
             </CardContent>
             <CardFooter>
-              <Button onClick={handleCreateMembersInBulk} className="w-full">
+              <Button
+                onClick={handleCreateMembersInBulk}
+                className="w-full bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white"
+              >
                 {isloading ? <Spinner /> : "Upload and Create Members"}
               </Button>
             </CardFooter>

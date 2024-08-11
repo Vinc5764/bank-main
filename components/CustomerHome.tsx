@@ -33,10 +33,10 @@ export default function CustomerHome() {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:3001/users/reports`,
+          `https://bank-payment-server.onrender.com/users/reports`,
           {
             params: {
-              accountNumber: datas.account.accountNumber,
+              accountNumber: datas?.account?.accountNumber,
             },
           }
         );
@@ -49,7 +49,7 @@ export default function CustomerHome() {
     };
 
     fetchData();
-  }, [datas.account.accountNumber]);
+  }, [datas?.account?.accountNumber]);
 
   const classifyTransaction = (transaction: any) => {
     if (transaction.dateWithdrawn) {
@@ -94,8 +94,8 @@ export default function CustomerHome() {
             }
           >
             {classifiedTransaction.type === "Deposit"
-              ? `+$${classifiedTransaction.amount.toFixed(2)}`
-              : `-$${classifiedTransaction.amount.toFixed(2)}`}
+              ? `+$${classifiedTransaction?.amount?.toFixed(2)}`
+              : `-$${classifiedTransaction?.amount?.toFixed(2)}`}
           </div>
         </div>
       );
@@ -108,20 +108,22 @@ export default function CustomerHome() {
           <Current />
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <Card>
+            <Card className="shadow-md border-none">
               <CardHeader>
-                <CardTitle>Checking Account</CardTitle>
+                <CardTitle className=" text-blue-900 text-4xl  font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
+                  Citti Savings
+                </CardTitle>
               </CardHeader>
               <CardContent className="flex items-center justify-between">
-                <div className="text-4xl font-bold">
-                  $ {fetchData?.totals?.checking?.toFixed(2) || 0.0}
+                <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-blue-300 to-blue-500">
+                  ₵ {fetchData?.totals?.checking?.toFixed(2) || 0.0}
                 </div>
-                {/* <Link
-                  href="/dashboard/deposits"
-                  className="text-primary"
-                  prefetch={false}
-                >
-                  <Button variant="outline" size="sm">
+                {/* <Link href="/dashboard/deposits" prefetch={false}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white border-none hover:opacity-90"
+                  >
                     Deposit
                   </Button>
                 </Link> */}
@@ -129,11 +131,16 @@ export default function CustomerHome() {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>Investment Account</CardTitle>
+                <CardTitle className=" text-blue-900 text-4xl  font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
+                  Citti Shares
+                </CardTitle>
               </CardHeader>
               <CardContent className="flex items-center justify-between">
-                <div className="text-4xl font-bold">
-                  ${fetchData?.totals?.investing?.toFixed(2) ?? 0.0}
+                {/* <div className="text-4xl font-bold">
+                  ₵{fetchData?.totals?.investing?.toFixed(2) ?? 0.0}
+                </div> */}
+                <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-blue-300 to-blue-500">
+                  ₵ {fetchData?.totals?.investing?.toFixed(2) || 0.0}
                 </div>
                 {/* <Link
                   href="/dashboard/withdraw"
@@ -148,7 +155,9 @@ export default function CustomerHome() {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>Recent Transactions</CardTitle>
+                <CardTitle className=" text-blue-900 text-4xl  font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
+                  Transactions
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-2">{recentTransactions}</div>
@@ -159,7 +168,7 @@ export default function CustomerHome() {
                 </Link>
               </CardFooter>
             </Card>
-            <Card>
+            {/* <Card>
               <CardHeader>
                 <CardTitle>Savings Account</CardTitle>
               </CardHeader>
@@ -168,16 +177,18 @@ export default function CustomerHome() {
                   ${fetchData?.totals?.savings?.toFixed(2) ?? 0.0}
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
             <Card>
               <CardHeader>
-                <CardTitle>Total Account Balance</CardTitle>
+                <CardTitle className=" text-blue-900 text-4xl  font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
+                  Total Balance
+                </CardTitle>
               </CardHeader>
               <CardContent className="flex items-center justify-between">
-                <div className="text-4xl font-bold">
-                  ${fetchData?.totals?.checking?.toFixed(2) ?? 0.0}
+                <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-blue-300 to-blue-500">
+                  ₵ {fetchData?.totals?.checking?.toFixed(2) || 0.0}
                 </div>
-                <Link
+                {/* <Link
                   href="/dashboard/deposits"
                   className="text-primary"
                   prefetch={false}
@@ -194,7 +205,7 @@ export default function CustomerHome() {
                   <Button variant="outline" size="sm">
                     withdraw
                   </Button>
-                </Link>
+                </Link> */}
               </CardContent>
             </Card>
           </div>

@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import logo from "../../public/png/logo-no-background.png";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -19,6 +20,7 @@ import {
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import useTokenStore from "@/lib/store";
+import Image from "next/image";
 
 const navLinks = [
   { href: "#", label: "Accounts" },
@@ -81,16 +83,19 @@ function RootLayout({ children }: any) {
             className="flex items-center gap-2 text-lg font-semibold text-primary"
             prefetch={false}
           >
-            <BanknoteIcon className="h-6 w-6" />
-            <span>CoreBANC</span>
+            <Image width={140} src={logo} alt="logo" />
           </Link>
         </nav>
         <div className="flex items-center gap-2">
           <span className="">{name}</span>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <Avatar className="h-12 w-12 bg-primary">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full bg-pink-300"
+              >
+                <Avatar className="h-12 w-12 bg-pink-300">
                   <AvatarImage src="/placeholder-user.jpg" />
                   <AvatarFallback>
                     <UserIcon className="h-6 w-6" />
@@ -123,15 +128,15 @@ function RootLayout({ children }: any) {
         >
           <nav className="flex flex-col items-center gap-4 px-2 py-5  sm:gap-6">
             <TooltipProvider>
-              {sidebar.map((link) => (
+              {sidebarLinksCustomer.map((link) => (
                 <Tooltip key={link.label}>
                   <TooltipTrigger asChild>
                     <Link
                       href={link.href}
-                      className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
+                      className="relative flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-300 ease-in-out bg-transparent hover:bg-pink-300 hover:from-blue-500 hover:to-purple-500 hover:text-white"
                       prefetch={false}
                     >
-                      <link.icon className="h-5 w-5" />
+                      <link.icon className="h-5 w-5 text-gray-600 transition-colors duration-300 ease-in-out hover:text-white" />
                       <span className="sr-only">{link.label}</span>
                     </Link>
                   </TooltipTrigger>
