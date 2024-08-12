@@ -53,12 +53,20 @@ const OurServices: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-16">
-      <h2 className="text-3xl font-bold text-center mb-4">Our Products</h2>
-      <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+      <h2 className="text-3xl font-bold text-center mb-4" data-aos="fade-left">
+        Our Products
+      </h2>
+      <p
+        className="text-center text-gray-600 mb-12 max-w-2xl mx-auto"
+        data-aos="fade-right"
+      >
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Diam, dapibus
         mattis vel feugiat erat tortor eleifend.
       </p>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+        data-aos="zoom-in-up"
+      >
         {services.map((service, index) => (
           <ServiceCard key={index} {...service} />
         ))}

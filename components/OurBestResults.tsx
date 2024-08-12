@@ -27,14 +27,23 @@ const OurBestResults: React.FC = () => {
   return (
     <div className="bg-white py-16">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-4">
+        <h2
+          className="text-3xl font-bold text-center mb-4"
+          data-aos="fade-left"
+        >
           Our best results for the year
         </h2>
-        <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+        <p
+          className="text-center text-gray-600 mb-12 max-w-2xl mx-auto"
+          data-aos="fade-right"
+        >
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Diam, dapibus
           mattis vel feugiat erat tortor eleifend.
         </p>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div
+          className="grid grid-cols-2 md:grid-cols-4 gap-8"
+          data-aos="zoom-in-up"
+        >
           {results.map((result, index) => (
             <ResultItem key={index} {...result} />
           ))}

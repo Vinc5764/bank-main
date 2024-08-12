@@ -12,7 +12,13 @@ interface PartnerProps {
 
 const Partner: React.FC<PartnerProps> = ({ logo, name }) => (
   <div className="flex items-center justify-center p-4">
-    <Image src={logo} width={72} height={72} alt={name} className="w-[10rem]  max-md:w-20" />
+    <Image
+      src={logo}
+      width={72}
+      height={72}
+      alt={name}
+      className="w-[10rem]  max-md:w-20"
+    />
   </div>
 );
 
@@ -26,9 +32,11 @@ const Partners: React.FC = () => {
 
   return (
     <div className="bg-[#FCE0EF]/80 h-[50vh] py-12">
-      <h2 className="text-2xl font-bold text-center mb-8">BUSINESS PARTNERS</h2>
+      <h2 className="text-2xl font-bold text-center mb-8" data-aos="fade-left">
+        BUSINESS PARTNERS
+      </h2>
       <div className="container mx-auto">
-        <div className="flex flex-wrap justify-center">
+        <div className="flex flex-wrap justify-center" data-aos="fade-up">
           {partners.map((partner, index) => (
             <Partner key={index} {...partner} />
           ))}

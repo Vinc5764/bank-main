@@ -71,12 +71,18 @@ const Footers: React.FC = () => {
   return (
     <footer className="bg-white py-12">
       <div className="flex flex-col lg:flex-row items-center justify-around lg: mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div
+          className="grid grid-cols-1 md:grid-cols-4 gap-8"
+          data-aos="fade-right"
+        >
           {footerData.map((column, index) => (
             <FooterColumn key={index} {...column} />
           ))}
         </div>
-        <div className="flex justify-between items-center mt-12 pt-8 border-t border-gray-300">
+        <div
+          className="flex justify-between items-center mt-12 pt-8 border-t border-gray-300"
+          data-aos="fade-left"
+        >
           <div className="flex px-5 items-center space-x-4">
             <span className="text-pink-500 font-bold inline-flex gap-x-2">
               <Image src={call} alt="call" /> 16519

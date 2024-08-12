@@ -5,7 +5,10 @@ import image from "@/public/Picture.svg";
 const Glance: React.FC = () => {
   return (
     <div className="flex flex-col md:flex-row items-center bg-white  rounded-lg overflow-hidden">
-      <div className="w-full inline-flex items-center lg:justify-start justify-center ">
+      <div
+        className="w-full inline-flex items-center lg:justify-start justify-center "
+        data-aos="fade-right"
+      >
         <Image
           width={48}
           height={48}
@@ -14,7 +17,7 @@ const Glance: React.FC = () => {
           className="w-[100vh] px-2 pt-2 object-contain"
         />
       </div>
-      <div className="w-full md:w-10/12 p-8">
+      <div className="w-full md:w-10/12 p-8" data-aos="fade-left">
         <h2 className="text-3xl font-bold mb-4">IPDC AT A GLANCE</h2>
         <p className="text-gray-600 mb-6">
           IPDC Finance Limited (previously known as "Industrial Promotion and

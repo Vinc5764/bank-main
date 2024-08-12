@@ -82,14 +82,20 @@ const Customers: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-16">
-      <h1 className="text-4xl font-bold text-center mb-4">
+      <h1 className="text-4xl font-bold text-center mb-4" data-aos="fade-left">
         Creating Extraordinary Customer Experience
       </h1>
-      <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+      <p
+        className="text-center text-gray-600 mb-12 max-w-2xl mx-auto"
+        data-aos="fade-right"
+      >
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam bibendum
         eget morbi dignissim eu pharetra consequat montes, sagittis.
       </p>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4  gap-8">
+      <div
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4  gap-8"
+        data-aos="zoom-in-up"
+      >
         {values.map((value, index) => (
           <Value key={index} {...value} />
         ))}

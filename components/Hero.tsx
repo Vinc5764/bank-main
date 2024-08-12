@@ -43,7 +43,7 @@ const Hero: React.FC = () => {
       </header>
 
       <main className="flex flex-col max-sm:flex-col-reverse sm:flex-col-reverse lg:flex-row  py-12">
-        <div className="w-full md:w-1/2  pr-10">
+        <div className="w-full md:w-1/2  pr-10" data-aos="fade-up">
           <h1 className="text-5xl font-bold mb-4 px-5">
             Chase Your Dream with us
           </h1>
@@ -77,7 +77,10 @@ const Hero: React.FC = () => {
           </div>
         </div>
 
-        <div className=" lg:mt-[-7.5rem] lg:mr-[-8rem]  z-10  max-sm:mt-[-7rem]  md:w-1/2 mt-8 md:mt-0 relative">
+        <div
+          className=" lg:mt-[-7.5rem] lg:mr-[-8rem]  z-10  max-sm:mt-[-7rem]  md:w-1/2 mt-8 md:mt-0 relative"
+          data-aos="fade-up"
+        >
           <Image src={hero} alt="Happy family" className="max-md:hidden " />
           <Image
             src={hero2}
