@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import hero from "@/public/Big.svg";
+import group from "@/public/Group.jpg";
 import hero2 from "@/public/Big2.svg";
 import fb from "@/public/facebook.svg";
 import link from "@/public/Vector.svg";
@@ -44,7 +45,7 @@ const Hero: React.FC = () => {
 
       <main className="flex flex-col max-sm:flex-col-reverse sm:flex-col-reverse lg:flex-row  py-12">
         <div className="w-full md:w-1/2  pr-10" data-aos="fade-up">
-          <h1 className="text-5xl font-bold mb-4 px-5">
+          <h1 className="text-5xl pt-12 font-bold mb-4 px-5">
             Chase Your Dream with us
           </h1>
           <p className="text-gray-600 mb-8 px-5">
@@ -81,12 +82,8 @@ const Hero: React.FC = () => {
           className=" lg:mt-[-7.5rem] lg:mr-[-8rem]  z-10  max-sm:mt-[-7rem]  md:w-1/2 mt-8 md:mt-0 relative"
           data-aos="fade-up"
         >
-          <Image src={hero} alt="Happy family" className="max-md:hidden " />
-          <Image
-            src={hero2}
-            alt="Happy family"
-            className="max-sm:block sm:hidden"
-          />
+          {/* <Image src={hero} alt="Happy family" className="max-md:hidden " /> */}
+          <Image src={group} alt="Happy family" className="" />
         </div>
       </main>
     </div>
