@@ -33,11 +33,14 @@ export default function Withdrawal() {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:3001/deposit", {
-        account: accountType,
-        amount,
-        email,
-      });
+      const response = await axios.post(
+        "https://bank-server-7h17.onrender.com/deposit",
+        {
+          account: accountType,
+          amount,
+          email,
+        }
+      );
 
       console.log(response);
 
@@ -94,9 +97,9 @@ export default function Withdrawal() {
                     <SelectValue placeholder="Select account type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="checking">Checking</SelectItem>
-                    <SelectItem value="savings">Savings</SelectItem>
-                    <SelectItem value="investment">Investment</SelectItem>
+                    {/* <SelectItem value="checking">Checking</SelectItem> */}
+                    <SelectItem value="savings">Citti Savings</SelectItem>
+                    <SelectItem value="investment">Citti Investment</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

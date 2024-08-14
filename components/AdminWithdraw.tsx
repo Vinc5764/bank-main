@@ -38,9 +38,7 @@ export default function AdminWithdrawal() {
     // Fetch customers from the backend
     async function fetchCustomers() {
       try {
-        const response = await axios.get(
-          "http://localhost:3001/admin/members"
-        );
+        const response = await axios.get("http://localhost:3001/admin/members");
         setCustomers(response.data);
       } catch (error) {
         console.error("Failed to fetch customers", error);
@@ -56,12 +54,15 @@ export default function AdminWithdrawal() {
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:3001/withdrawal", {
-        account: accountType,
-        amount,
-        email,
-        accountNumber: selectedCustomer,
-      });
+      const response = await axios.post(
+        "https://bank-server-7h17.onrender.com/withdrawal",
+        {
+          account: accountType,
+          amount,
+          email,
+          accountNumber: selectedCustomer,
+        }
+      );
 
       console.log(response);
 
@@ -106,9 +107,9 @@ export default function AdminWithdrawal() {
                     <SelectValue placeholder="Select account type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="checking">Checking</SelectItem>
-                    <SelectItem value="savings">Savings</SelectItem>
-                    <SelectItem value="investment">Investment</SelectItem>
+                    {/* <SelectItem value="checking">Checking</SelectItem> */}
+                    <SelectItem value="savings">Citti Savings</SelectItem>
+                    <SelectItem value="investment">Citti Investment</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

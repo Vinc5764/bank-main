@@ -18,13 +18,13 @@ const HomePage = () => {
   }, [userType]);
 
   // Handle cases where userType might not be resolved immediately
-  // if (resolvedUserType === null) {
-  //   return <div>Loading...</div>; // or any other loading indicator
-  // }
+  if (resolvedUserType === null) {
+    return <div>Loading...</div>; // or any other loading indicator
+  }
 
   return (
     <div>
-      {resolvedUserType === "customer" ? <CustomerHome /> : <CustomerHome />}
+      {resolvedUserType === "customer" ? <CustomerHome /> : <AdminHome />}
     </div>
   );
 };

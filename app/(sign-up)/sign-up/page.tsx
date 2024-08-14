@@ -55,7 +55,7 @@ export default function Page() {
 
     try {
       const response = await fetch(
-        "https://bank-payment-server.onrender.com/bank/signup",
+        "https://bank-server-7h17.onrender.com/bank/signup",
         {
           method: "POST",
           headers: {

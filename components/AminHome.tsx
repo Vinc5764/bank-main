@@ -49,10 +49,10 @@ export default function AdminHome() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://bank-payment-server.onrender.com/admin/homepage`
+          `https://bank-server-7h17.onrender.com/admin/homepage`
         );
         const res = await axios.get(
-          `https://bank-payment-server.onrender.com/admin/reports`
+          `https://bank-server-7h17.onrender.com/admin/reports`
         );
         setIsLoading(false);
         setResults(response.data);

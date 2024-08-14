@@ -42,7 +42,7 @@ export default function MemberList() {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `https://bank-payment-server.onrender.com/admin/members`
+          `https://bank-server-7h17.onrender.com/admin/members`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -65,7 +65,7 @@ export default function MemberList() {
 
     try {
       await axios.put(
-        `https://4195-102-176-65-181.ngrok-free.app/admin/member/${updatedMember?._id}`,
+        `https://bank-server-7h17.onrender.com/admin/member/${updatedMember?._id}`,
         {
           name: updatedMember.name,
           email: updatedMember.email,
@@ -88,7 +88,7 @@ export default function MemberList() {
   const handleDeleteCustomer = async (memberId: any) => {
     try {
       await axios.delete(
-        `https://bank-payment-server.onrender.com/users/delete/${memberId}`
+        `https://bank-server-7h17.onrender.com/users/delete/${memberId}`
       );
 
       const updatedMembers = members.filter((m: any) => m.id !== memberId);

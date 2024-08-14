@@ -48,19 +48,18 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import Spinner from "./Spinner";
-import useTokenStore from "@/lib/store";
 
 export default function CreateMembers() {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [selectedBank, setSelectedBank] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [balance, setBalance] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [csvFile, setCsvFile] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
   const [loading, setLoading] = useState(false);
   const [isloading, setIsLoading] = useState(false);
-  // const { token, userType, clearToken, name } = useTokenStore();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -85,11 +84,12 @@ export default function CreateMembers() {
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://9a14-197-251-205-122.ngrok-free.app/admin/members",
+        "https://bank-server-7h17.onrender.com/admin/members",
         {
-          name,
           email,
           password,
+          mobileNumber,
+          balance,
           accountNumber,
         }
       );
@@ -114,13 +114,13 @@ export default function CreateMembers() {
     Papa.parse(csvFile, {
       header: true,
       complete: async (results: any) => {
-        // Filter out rows where name, email, password, selectedBank, or accountNumber is empty
+        // Filter out rows where email, password, mobileNumber, balance, or accountNumber is empty
         const validData = results.data.filter(
           (row: any) =>
-            row.name &&
             row.email &&
             row.password &&
-            row.selectedBank &&
+            row.mobileNumber &&
+            row.balance &&
             row.accountNumber
         );
 
@@ -128,7 +128,7 @@ export default function CreateMembers() {
 
         try {
           const response = await axios.post(
-            "http://localhost:3001/admin/bulkmembers",
+            "https://bank-server-7h17.onrender.com/admin/bulkmembers",
             validData
           );
           console.log("Backend Response:", response.data);
@@ -147,7 +147,7 @@ export default function CreateMembers() {
   };
 
   return (
-    <div className="flex h-screen w-full flex-col">
+    <div className="flex  w-full flex-col">
       <main className="flex-1 overflow-auto p-6">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2">
           <Card>
@@ -165,12 +165,12 @@ export default function CreateMembers() {
               <form>
                 <div className="grid gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Name</Label>
+                    <Label htmlFor="accountNumber">Account Number</Label>
                     <Input
-                      id="name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="Enter name"
+                      id="accountNumber"
+                      value={accountNumber}
+                      onChange={(e) => setAccountNumber(e.target.value)}
+                      placeholder="Enter account number"
                     />
                   </div>
                   <div className="space-y-2">
@@ -184,6 +184,15 @@ export default function CreateMembers() {
                     />
                   </div>
                   <div className="space-y-2">
+                    <Label htmlFor="mobileNumber">Mobile Number</Label>
+                    <Input
+                      id="mobileNumber"
+                      value={mobileNumber}
+                      onChange={(e) => setMobileNumber(e.target.value)}
+                      placeholder="Enter mobile number,Eg 0554674801"
+                    />
+                  </div>
+                  <div className="space-y-2">
                     <Label htmlFor="password">Password</Label>
                     <Input
                       id="password"
@@ -193,22 +202,14 @@ export default function CreateMembers() {
                       placeholder="Enter password"
                     />
                   </div>
-                  {/* <div className="space-y-2">
-                    <Label htmlFor="selectedBank">Selected Bank</Label>
-                    <Input
-                      id="selectedBank"
-                      value={selectedBank}
-                      onChange={(e) => setSelectedBank(e.target.value)}
-                      placeholder="Enter selected bank"
-                    />
-                  </div> */}
                   <div className="space-y-2">
-                    <Label htmlFor="accountNumber">Account Number</Label>
+                    <Label htmlFor="balance">Balance</Label>
                     <Input
-                      id="accountNumber"
-                      value={accountNumber}
-                      onChange={(e) => setAccountNumber(e.target.value)}
-                      placeholder="Enter account number"
+                      id="balance"
+                      type="number"
+                      value={balance}
+                      onChange={(e) => setBalance(e.target.value)}
+                      placeholder="Enter balance"
                     />
                   </div>
                 </div>
@@ -223,7 +224,7 @@ export default function CreateMembers() {
               </Button>
             </CardFooter>
           </Card>
-          <Card>
+          <Card className=" h-[50vh]">
             <CardHeader>
               <CardTitle>
                 <h2 className="mt-6  text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
@@ -285,15 +286,16 @@ function CircleCheckIcon(props: any) {
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
-      viewBox="0 0 24 24"
       fill="none"
+      viewBox="0 0 24 24"
       stroke="currentColor"
       strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
     >
-      <circle cx="12" cy="12" r="10" />
-      <path d="m9 12 2 2 4-4" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M9 11l3 3L22 4M22 12A10 10 0 1112 2a10 10 0 0110 10z"
+      />
     </svg>
   );
 }

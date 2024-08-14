@@ -45,7 +45,7 @@ const Page = () => {
     try {
       setIsLoading(true);
       const response: any = await fetch(
-        "https://bank-payment-server.onrender.com/users/login",
+        "https://bank-server-7h17.onrender.com/users/login",
         {
           method: "POST",
           headers: {

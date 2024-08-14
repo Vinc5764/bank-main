@@ -128,7 +128,7 @@ function RootLayout({ children }: any) {
         >
           <nav className="flex flex-col items-center gap-4 px-2 py-5  sm:gap-6">
             <TooltipProvider>
-              {sidebarLinksCustomer.map((link) => (
+              {sidebarLinks.map((link) => (
                 <Tooltip key={link.label}>
                   <TooltipTrigger asChild>
                     <Link

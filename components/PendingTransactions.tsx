@@ -121,7 +121,7 @@ export default function PendingTransaction() {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `https://bank-payment-server.onrender.com/admin/pendingwithdrawals`
+          `https://bank-server-7h17.onrender.com/admin/pendingwithdrawals`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
