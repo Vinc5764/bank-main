@@ -2,13 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import CustomerHome from "@/components/CustomerHome";
-import useTokenStore from "@/lib/store";
 
-// import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/Dialog";
+import useTokenStore from "@/lib/store";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import AdminHome from "@/components/AminHome";
 import {
   Dialog,
   DialogContent,
@@ -18,8 +16,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import axios from "axios";
-const baseURL =
-  "https://bank-server-7h17.onrender.com";
+import AdminHome from "@/components/AminHome";
+
+const baseURL = "https://bank-server-7h17.onrender.com";
 
 const HomePage = () => {
   const { userType, datas, setUserType, setNames }: any = useTokenStore();
@@ -45,9 +44,7 @@ const HomePage = () => {
 
   const handleSave = async () => {
     try {
-      // Replace this URL with the actual endpoint for updating the user's profile
       const apiUrl = `${baseURL}/users/reset`;
-      console.log(datas);
 
       // Data to send in the request body
       const data = {
@@ -60,26 +57,22 @@ const HomePage = () => {
       const response = await axios.post(apiUrl, data);
 
       if (response.status === 200) {
-        // Handle successful response
         setUserType("customer");
         setNames(response.data.user.name);
-        console.log(response.data);
-
         alert("User updated successfully");
         setShowModal(false); // Close the modal after saving
       } else {
-        // Handle non-200 responses
         console.error("Failed to update user", response.data);
       }
     } catch (error) {
-      // Handle errors
       console.error("Error updating user", error);
     }
   };
 
   return (
     <div>
-      {resolvedUserType === "customer" ? <CustomerHome /> : <AdminHome />}
+      {resolvedUserType === "customer" && <CustomerHome />}
+      {resolvedUserType === "admin" && <AdminHome />}
 
       {showModal && (
         <Dialog open={true} onOpenChange={() => setShowModal(false)}>
@@ -113,9 +106,6 @@ const HomePage = () => {
               <Button onClick={handleSave} className="mt-4">
                 Save
               </Button>
-              {/* <Button onClick={() => setShowModal(false)} className="mt-4">
-                Close
-              </Button> */}
             </DialogFooter>
           </DialogContent>
         </Dialog>
