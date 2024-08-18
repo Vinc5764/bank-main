@@ -155,7 +155,8 @@ export default function MemberList() {
                 <TableHead>Name</TableHead>
                 <TableHead>Email</TableHead>
                 <TableHead>Account Number</TableHead>
-                <TableHead>Balance</TableHead>
+                <TableHead>Savings</TableHead>
+                <TableHead>Shares</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -234,7 +235,12 @@ export default function MemberList() {
                       <TableCell>{member?.name}</TableCell>
                       <TableCell>{member?.email}</TableCell>
                       <TableCell>{member?.accountNumber}</TableCell>
-                      <TableCell>${member?.balance?.toFixed(2)}</TableCell>
+                      <TableCell>
+                        ₵{member?.savingsBalance?.toFixed(2)}
+                      </TableCell>
+                      <TableCell>
+                        ₵{member?.sharesBalance?.toFixed(2)}
+                      </TableCell>
                       <TableCell>
                         <Button
                           variant="outline"

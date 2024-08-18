@@ -272,7 +272,7 @@ export default function Reports() {
                       ).toLocaleDateString()}
                     </TableCell>
                     <TableCell>{transaction.account}</TableCell>
-                    <TableCell>${transaction.amount?.toFixed(2)}</TableCell>
+                    <TableCell>₵{transaction.amount?.toFixed(2)}</TableCell>
                     <TableCell>{transaction.email}</TableCell>
                     <TableCell>
                       <Badge

@@ -187,7 +187,7 @@ export default function AdminHome() {
                     </CardHeader>
                     <CardContent>
                       <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-blue-300 to-blue-500">
-                        $
+                        ₵
                         {results?.totalWithdrawals + results?.totalDeposits ??
                           0}
                       </div>
@@ -201,7 +201,7 @@ export default function AdminHome() {
                     </CardHeader>
                     <CardContent>
                       <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-blue-300 to-blue-500">
-                        ${results?.totalDeposits ?? 0}
+                        ₵{results?.totalDeposits ?? 0}
                       </div>
                     </CardContent>
                   </Card>
@@ -213,7 +213,7 @@ export default function AdminHome() {
                     </CardHeader>
                     <CardContent>
                       <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-blue-300 to-blue-500">
-                        ${results?.totalWithdrawals ?? 0}
+                        ₵{results?.totalWithdrawals ?? 0}
                       </div>
                     </CardContent>
                   </Card>
@@ -244,7 +244,7 @@ export default function AdminHome() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Account Number</TableHead>
-                      <TableHead>Amount</TableHead>
+                      <TableHead>Amount(GHS)</TableHead>
                       <TableHead>Type</TableHead>
                       <TableHead>Date</TableHead>
                       <TableHead>Status</TableHead>
