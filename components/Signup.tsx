@@ -55,7 +55,7 @@ export default function Signup() {
 
     try {
       const response = await fetch(
-        "https://bank-server-7h17.onrender.com/admin/bank/",
+        "https://bank-server-7h17.onrender.com/bank/",
         {
           method: "POST",
           headers: {
