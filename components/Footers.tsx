@@ -7,12 +7,12 @@ const Footer = () => {
       <div className="container mx-auto">
         <div className="text-center space-y-10 text-sm">
           <div className="space-y-2  space-x-2">
-            <Link href={`/donate`}>
+            <Link href={`/signup`}>
               <button className=" bg-[#A4167A] px-4 py-2 text-white py-2 rounded hover:bg-[#A4167A] transition">
                 JOIN US
               </button>
             </Link>
-            <Link href={`/register`}>
+            <Link href={`/sign-in`}>
               <button className="px-4 py-2 text-white font-semibold  border rounded">
                 SIGN IN
               </button>
