@@ -50,7 +50,7 @@ const Hero: React.FC = () => {
             savings packages to our clients. Let us prosper together!
           </p>
           <div className="flex  space-x-4 px-5 mb-8">
-            <Link href="/signup">
+            <Link href="/sign-up">
               <button className="md:px-6 px-4 w-[150px] h-[50px] text-sm py-4 bg-pink-500 text-white font-bold rounded-full hover:bg-pink-600">
                 Join Us
               </button>
