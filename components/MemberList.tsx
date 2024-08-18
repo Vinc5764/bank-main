@@ -157,6 +157,7 @@ export default function MemberList() {
                 <TableHead>Account Number</TableHead>
                 <TableHead>Savings</TableHead>
                 <TableHead>Shares</TableHead>
+                <TableHead>Total Balance</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -240,6 +241,13 @@ export default function MemberList() {
                       </TableCell>
                       <TableCell>
                         ₵{member?.sharesBalance?.toFixed(2)}
+                      </TableCell>
+                      <TableCell>
+                        ₵{" "}
+                        {(
+                          (member?.savingsBalance || 0) +
+                          (member?.sharesBalance || 0)
+                        ).toFixed(2)}
                       </TableCell>
                       <TableCell>
                         <Button
