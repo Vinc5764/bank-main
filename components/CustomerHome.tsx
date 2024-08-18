@@ -87,7 +87,7 @@ export default function CustomerHome() {
       return (
         <div
           key={transaction._id}
-          className="flex items-center justify-between"
+          className="flex  items-center justify-between"
         >
           <div className="flex items-center gap-2">
             {classifiedTransaction.type === "Deposit" ? (
@@ -115,15 +115,15 @@ export default function CustomerHome() {
   const reports = fetchData?.allTransactions || [];
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-background">
-      <main className="flex-1 gap-5 p-4 sm:p-6">
+    <div className="flex  flex-col  bg-background">
+      <main className=" md:w-full gap-5 p-4 sm:p-6">
         {isLoading ? (
           <Current />
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 sm:grid-cols-1 lg:grid-cols-4">
             <Card>
               <CardHeader>
-                <CardTitle className=" text-blue-900   font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
+                <CardTitle className="text-blue-900 font-bold bg-clip-text from-blue-500 via-purple-500 to-pink-500">
                   Citti Savings
                 </CardTitle>
               </CardHeader>
@@ -135,7 +135,7 @@ export default function CustomerHome() {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle className=" text-blue-900   font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
+                <CardTitle className="text-blue-900 font-bold bg-clip-text from-blue-500 via-purple-500 to-pink-500">
                   Citti Shares
                 </CardTitle>
               </CardHeader>
@@ -147,22 +147,17 @@ export default function CustomerHome() {
             </Card>
             <Card className="">
               <CardHeader>
-                <CardTitle className=" text-blue-900   font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
+                <CardTitle className="text-blue-900 font-bold bg-clip-text from-blue-500 via-purple-500 to-pink-500">
                   Recent Transactions
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-2">{recentTransactions}</div>
               </CardContent>
-              {/* <CardFooter>
-                <Link href="#" className="text-primary" prefetch={false}>
-                  View all transactions
-                </Link>
-              </CardFooter> */}
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle className=" text-blue-900   font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
+                <CardTitle className="text-blue-900 font-bold bg-clip-text from-blue-500 via-purple-500 to-pink-500">
                   Total Balance
                 </CardTitle>
               </CardHeader>
@@ -178,12 +173,14 @@ export default function CustomerHome() {
             </Card>
           </div>
         )}
-        <Card className=" w-full mt-10">
-          <CardHeader>
-            <CardTitle className=" text-blue-900 text-2xl  font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
-              All Transactions
-            </CardTitle>
-          </CardHeader>
+      </main>
+      <Card className="w-[390px] md:w-full mt-10">
+        <CardHeader>
+          <CardTitle className="text-blue-900 text-lg sm:text-2xl font-bold bg-clip-text from-blue-500 via-purple-500 to-pink-500">
+            All Transactions
+          </CardTitle>
+        </CardHeader>
+        <div className="overflow-x-auto ">
           <CardContent>
             {isLoading ? (
               <SkeletonDemo />
@@ -192,12 +189,12 @@ export default function CustomerHome() {
                 <Image
                   src={noDataImage}
                   alt="No data fetched"
-                  className="w-1/3 lg:w-1/12"
+                  className="w-2/3 lg:w-1/4"
                 />
-                <p className="text-xl font-bold">No data fetched</p>
+                <p className="text-lg sm:text-xl font-bold">No data fetched</p>
               </div>
             ) : (
-              <Table>
+              <Table className="min-w-full">
                 <TableHeader>
                   <TableRow>
                     <TableHead>Account Number</TableHead>
@@ -223,7 +220,6 @@ export default function CustomerHome() {
                         <TableCell>{classifiedTransaction.amount}.00</TableCell>
                         <TableCell>{classifiedTransaction.type}</TableCell>{" "}
                         <TableCell>{transaction.account}</TableCell>
-                        {/* Add this line */}
                         <TableCell>
                           {new Date(
                             transaction.dateDeposited ||
@@ -250,8 +246,8 @@ export default function CustomerHome() {
               </Table>
             )}
           </CardContent>
-        </Card>
-      </main>
+        </div>
+      </Card>
     </div>
   );
 }

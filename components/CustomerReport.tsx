@@ -179,7 +179,7 @@ export default function CustomerReport() {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 py-8">
+    <div className="md:w-full w-[390px] max-w-6xl mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="mt-6  text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
           Transaction Report

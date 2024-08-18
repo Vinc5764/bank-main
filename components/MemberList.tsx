@@ -118,7 +118,7 @@ export default function MemberList() {
   };
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container-none md:w-full w-[390px] mx-auto py-8">
       <div className="mb-6 flex items-center justify-between">
         <h2 className="mt-6  text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
           Bank Members

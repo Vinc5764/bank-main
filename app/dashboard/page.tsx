@@ -70,10 +70,11 @@ const HomePage = () => {
   };
 
   return (
-    <div>
-      {resolvedUserType === "customer" && <CustomerHome />}
-      {resolvedUserType === "admin" && <AdminHome />}
-
+    <div className=" ">
+      <div className=" ">
+        {resolvedUserType === "customer" && <CustomerHome />}
+        {resolvedUserType === "bank" && <AdminHome />}
+      </div>
       {showModal && (
         <Dialog open={true} onOpenChange={() => setShowModal(false)}>
           <DialogContent>

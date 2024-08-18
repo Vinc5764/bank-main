@@ -264,7 +264,7 @@ export default function PendingTransaction() {
           </DropdownMenu>
         </div>
       </div>
-      <Card>
+      <Card className=" w-[390px] md:w-full">
         <CardContent>
           {isLoading ? (
             <SkeletonDemo />
