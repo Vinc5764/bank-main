@@ -50,7 +50,10 @@ const Customers: React.FC = () => {
 
   return (
     <div className="container mx-auto space-y-10 px-4 py-20">
-      <h1 className="text-4xl text-blue-950 font-bold text-center mb-4" data-aos="fade-left">
+      <h1
+        className="text-4xl max-sm:mt-[-6rem] text-blue-950 font-bold text-center mb-4"
+        data-aos="fade-left"
+      >
         Our Values
       </h1>
       <div

@@ -39,8 +39,11 @@ const Hero: React.FC = () => {
         </div>
       </header>
 
-      <main className="flex  flex-col max-sm:flex-col-reverse max-sm:space-y-5 sm:flex-col-reverse lg:flex-row py-12">
-        <div className="w-full max-sm:mt-[2rem] space-y-6 md:w-1/2 pr-10" data-aos="fade-up">
+      <main className="flex max-sm:mt-[-6rem]  flex-col max-sm:flex-col-reverse max-sm:space-y-5 sm:flex-col-reverse lg:flex-row py-12">
+        <div
+          className="w-full max-sm:mt-[2rem] space-y-6 md:w-1/2 pr-10"
+          data-aos="fade-up"
+        >
           <h1 className="text-2xl md:text-5xl px-5 leading-tight font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-400  to-blue-500">
             WORK. SAVE. PROSPER.
           </h1>
@@ -69,7 +72,7 @@ const Hero: React.FC = () => {
         </div>
 
         <div
-          className="lg:mt-[-7.5rem] max-sm:mt-[-8rem] lg:mr-[-8rem] z-10 md:w-1/2 mt-8 md:mt-0 relative"
+          className="lg:mt-[-7.5rem]  lg:mr-[-8rem] z-10 md:w-1/2 mt-8 md:mt-0 relative"
           data-aos="fade-up"
         >
           <Image src={group} alt="Happy family" className="" />
