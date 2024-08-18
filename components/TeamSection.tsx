@@ -49,17 +49,17 @@ const TeamSection: React.FC = () => {
       imageUrl: image, // Replace with actual image paths
     },
     {
-      name: "Mr Samuel Armoo",
-      title: "Manager",
-      description:
-        "An experienced accountant, skilled in management, Mr. Samuel Armoo is the able manager of Citti Credit.",
-      imageUrl: image, // Replace with actual image paths
-    },
-    {
       name: "Mr Alexander De-Sowah",
       title: "Vice Chairman",
       description:
         "An investment banker with a passion for business growth, Mr. Alexander De-Sowah serves as vice-chairman providing day-to-day oversight.",
+      imageUrl: image, // Replace with actual image paths
+    },
+    {
+      name: "Mr Samuel Armoo",
+      title: "Manager",
+      description:
+        "An experienced accountant, skilled in management, Mr. Samuel Armoo is the able manager of Citti Credit.",
       imageUrl: image, // Replace with actual image paths
     },
     {
