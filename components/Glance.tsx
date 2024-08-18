@@ -4,9 +4,9 @@ import image from "@/public/Picture.svg";
 
 const Glance: React.FC = () => {
   return (
-    <div className="flex flex-col md:flex-row items-center bg-white  rounded-lg overflow-hidden">
+    <div className="flex mt-[5%] flex-col md:flex-row items-center bg-white rounded-lg overflow-hidden">
       <div
-        className="w-full inline-flex items-center lg:justify-start justify-center "
+        className="w-full inline-flex items-center lg:justify-start justify-center"
         data-aos="fade-right"
       >
         <Image
@@ -18,20 +18,17 @@ const Glance: React.FC = () => {
         />
       </div>
       <div className="w-full md:w-10/12 p-8" data-aos="fade-left">
-        <h2 className="text-3xl font-bold mb-4">IPDC AT A GLANCE</h2>
+        <h2 className="text-3xl text-blue-950 font-bold mb-4">CITTI CREDIT AT A GLANCE</h2>
         <p className="text-gray-600 mb-6">
-          IPDC Finance Limited (previously known as "Industrial Promotion and
-          Development Company of Bangladesh Limited") is the first private
-          sector financial institution of the country established in 1981 by a
-          distinguished group of shareholders namely International Finance
-          Corporation (IFC), USA, German Investment and Development Company
-          (DEG), Germany, The Aga Khan Fund for Economic Development (AKFED),
-          Switzerland, Commonwealth Development Corporation (CDC), UK and the
-          Government of Bangladesh
+          Serving close to 1000 members, Citti Credit is a vibrant financial hub
+          in the Adenta municipality. Amongst our most patronized products are
+          Citti Savings and Citti Shares, as well as our loans given at an
+          interest rate of 12% per annum. Our Head Office is located at the
+          office area of the City of God Church Center, at Ashaley Botwe,
+          Highways. Our opening hours are 8.00 am-5.00 pm from Tuesday to
+          Friday. We look forward to welcoming and serving you.
         </p>
-        <a href="#" className="text-pink-500 font-semibold hover:underline">
-          Read More →
-        </a>
+        {/* Removed the "Read More" link */}
       </div>
     </div>
   );

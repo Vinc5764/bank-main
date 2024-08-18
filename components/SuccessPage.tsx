@@ -5,6 +5,8 @@
  */
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import Link from "next/link";
+const baseURL =
+   "https://bank-server-7h17.onrender.com";
 
 export default function SuccessPage() {
   return (
@@ -14,17 +16,17 @@ export default function SuccessPage() {
           <CheckIcon className="h-8 w-8 text-white" />
         </div>
         <h1 className="mt-6 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-          Payment Successful
+          Deposit Successful
         </h1>
-        <p className="mt-4 text-muted-foreground">
+        {/* <p className="mt-4 text-muted-foreground">
           Thank you for your payment. Your order is being processed and will be
           shipped soon.
-        </p>
+        </p> */}
       </div>
       <div className="mt-8 w-full max-w-md space-y-4">
         <Card>
           <CardHeader>
-            <CardTitle>Order Summary</CardTitle>
+            <CardTitle> Summary</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className="flex items-center justify-between">

@@ -3,14 +3,14 @@ import React from "react";
 import image1 from "@/public/Image.svg";
 import image2 from "@/public/Image2.svg";
 import image3 from "@/public/Image3.svg";
-import image4 from "@/public/Image4.svg";
 
 interface ServiceProps {
   image: string;
   title: string;
+  description: string;
 }
 
-const ServiceCard: React.FC<ServiceProps> = ({ image, title }) => (
+const ServiceCard: React.FC<ServiceProps> = ({ image, title, description }) => (
   <div className="flex flex-col">
     <Image
       width={48}
@@ -19,7 +19,8 @@ const ServiceCard: React.FC<ServiceProps> = ({ image, title }) => (
       alt={title}
       className="w-full h-48 object-cover rounded-lg mb-4"
     />
-    <h3 className="text-lg font-semibold mb-2">{title}</h3>
+    <h3 className="text-lg text-blue-950 font-semibold mb-2">{title}</h3>
+    <p className="text-gray-600 mb-4">{description}</p>
     <a
       href="#"
       className="text-pink-500 font-semibold hover:underline flex items-center"
@@ -45,26 +46,40 @@ const ServiceCard: React.FC<ServiceProps> = ({ image, title }) => (
 
 const OurServices: React.FC = () => {
   const services = [
-    { image: image1, title: "IPDC SAVING SCHEMES" },
-    { image: image2, title: "IPDC PERSONAL LOAN" },
-    { image: image3, title: "IPDC DEPOSIT SCHEMES" },
-    { image: image4, title: "IPDC AUTO LOAN" },
+    {
+      image: image1,
+      title: "CITTI SAVINGS",
+      description:
+        "Save with us, for a secure savings experience and enjoy an interest rate of 6% per annum.",
+    },
+    {
+      image: image2,
+      title: "CITTI SHARES",
+      description:
+        "Our share account entitles members to dividends. Minimum shares are currently available at GHC 500.00.",
+    },
+    {
+      image: image3,
+      title: "CITTI LOANS",
+      description:
+        "Available to qualified members following vetting by the loan committee, at a rate of 12% per annum. We prioritize business loans, fostering prosperity.",
+    },
   ];
 
   return (
     <div className="container mx-auto px-4 py-16">
-      <h2 className="text-3xl font-bold text-center mb-4" data-aos="fade-left">
+      <h2 className="text-4xl text-blue-950 font-bold text-center mb-4" data-aos="fade-left">
         Our Products
       </h2>
       <p
         className="text-center text-gray-600 mb-12 max-w-2xl mx-auto"
         data-aos="fade-right"
       >
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Diam, dapibus
-        mattis vel feugiat erat tortor eleifend.
+        Discover our range of products designed to help you achieve financial
+        security and prosperity.
       </p>
       <div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         data-aos="zoom-in-up"
       >
         {services.map((service, index) => (

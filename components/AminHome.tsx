@@ -38,6 +38,8 @@ import CurrentTariffsSkeleton from "./DashSkele";
 import { SkeletonDemo } from "./Skeleton";
 import noDataImage from "@/public/last image.png"; // Assuming you have this image in your public folder
 import Image from "next/image";
+const baseURL =
+   "https://bank-server-7h17.onrender.com";
 
 export default function AdminHome() {
   const [reports, setReports] = useState([]);
@@ -48,12 +50,8 @@ export default function AdminHome() {
     setIsLoading(true);
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `https://bank-server-7h17.onrender.com/admin/homepage`
-        );
-        const res = await axios.get(
-          `https://bank-server-7h17.onrender.com/admin/reports`
-        );
+        const response = await axios.get(`${baseURL}/admin/homepage`);
+        const res = await axios.get(`${baseURL}/admin/reports`);
         setIsLoading(false);
         setResults(response.data);
 
@@ -157,7 +155,7 @@ export default function AdminHome() {
             <CardHeader>
               <CardTitle>
                 <h2 className="mt-6  text-2xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
-                    Dashboard
+                  Dashboard
                 </h2>
               </CardTitle>
               <CardDescription>
@@ -171,20 +169,24 @@ export default function AdminHome() {
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Total Members</CardTitle>
+                      <CardTitle className=" text-blue-900 text-2xl  font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
+                        Total Members
+                      </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-4xl font-semibold">
+                      <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-blue-300 to-blue-500">
                         {results.users ?? 0}
                       </div>
                     </CardContent>
                   </Card>
                   <Card>
                     <CardHeader>
-                      <CardTitle>Total Transactions</CardTitle>
+                      <CardTitle className=" text-blue-900 text-2xl  font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
+                        Total Transactions
+                      </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-4xl font-semibold">
+                      <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-blue-300 to-blue-500">
                         $
                         {results?.totalWithdrawals + results?.totalDeposits ??
                           0}
@@ -193,20 +195,24 @@ export default function AdminHome() {
                   </Card>
                   <Card>
                     <CardHeader>
-                      <CardTitle>Total Deposits</CardTitle>
+                      <CardTitle className=" text-blue-900 text-2xl  font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
+                        Total Deposits
+                      </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-4xl font-semibold">
+                      <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-blue-300 to-blue-500">
                         ${results?.totalDeposits ?? 0}
                       </div>
                     </CardContent>
                   </Card>
                   <Card>
                     <CardHeader>
-                      <CardTitle>Total Withdrawals</CardTitle>
+                      <CardTitle className=" text-blue-900 text-2xl  font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
+                        Total Withdrawals
+                      </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-4xl font-semibold">
+                      <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-blue-300 to-blue-500">
                         ${results?.totalWithdrawals ?? 0}
                       </div>
                     </CardContent>
@@ -217,7 +223,9 @@ export default function AdminHome() {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>Recent Transactions</CardTitle>
+              <CardTitle className=" text-blue-900 text-2xl  font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
+                Recent Transactions
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {isLoading ? (

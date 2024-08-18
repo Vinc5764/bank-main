@@ -1,6 +1,6 @@
 const Current = () => {
   return (
-    <div className="grid grid-cols-4 col-span-12 gap-6 animate-pulse">
+    <div className="grid md:grid-cols-4 col-span-12 gap-6 animate-pulse">
       {[1, 3, 4, 5, 4].map((e, i) => {
         return (
           <div

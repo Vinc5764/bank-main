@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Spinner from "@/components/Spinner";
 import useTokenStore from "@/lib/store";
+const baseURL = "https://bank-server-7h17.onrender.com";
 
 const Page = () => {
   const [email, setEmail] = useState("");
@@ -44,26 +45,23 @@ const Page = () => {
     setPasswordError(null);
     try {
       setIsLoading(true);
-      const response: any = await fetch(
-        "https://bank-server-7h17.onrender.com/users/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer f3eac184635c8886dcb0a2b1f1dcdf35b5b2ae778d1c36f95245ba58278df78222e9d5ec48532a14608d1b3c3665f9def41f`,
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
-        }
-      );
+      const response: any = await fetch(`${baseURL}/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer f3eac184635c8886dcb0a2b1f1dcdf35b5b2ae778d1c36f95245ba58278df78222e9d5ec48532a14608d1b3c3665f9def41f`,
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
       const res = await response.json();
 
       setIsLoading(false);
       const token = res?.token;
 
-      setToken(token, res?.accountType, res?.account?.name, res);
+      setToken(token, res?.account?.userType, res?.account?.name, res);
 
       if (res.token) {
         r.push("/dashboard/");
@@ -82,7 +80,7 @@ const Page = () => {
           setError("Login failed. Please try again.");
         }
       } else {
-        setError("Login failed. Please try again.");
+        setError(`Login failed. Please try again.${error}`);
       }
     }
   };

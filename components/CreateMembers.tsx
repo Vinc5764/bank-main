@@ -49,11 +49,15 @@ import {
 import { Button } from "@/components/ui/button";
 import Spinner from "./Spinner";
 
+const baseURL =
+   "https://bank-server-7h17.onrender.com";
+
 export default function CreateMembers() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
-  const [balance, setBalance] = useState("");
+  const [savingsBalance, setSavingsBalance] = useState("");
+  const [sharesBalance, setSharesBalance] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [csvFile, setCsvFile] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
@@ -63,9 +67,7 @@ export default function CreateMembers() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `https://9a14-197-251-205-122.ngrok-free.app/api/getMembers`
-        );
+        const response = await fetch(`${baseURL}/api/getMembers`);
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -83,17 +85,14 @@ export default function CreateMembers() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post(
-        "https://bank-server-7h17.onrender.com/admin/members",
-        {
-          email,
-          password,
-          mobileNumber,
-          balance,
-          accountNumber,
-        }
-      );
-      const token = response.data.token;
+      const response = await axios.post(`${baseURL}/users/signup`, {
+        email,
+        password,
+        mobileNumber,
+        savingsBalance,
+        sharesBalance,
+        accountNumber,
+      });
       console.log(response.data);
       setLoading(false);
       setIsModalOpen(true); // Open the modal on success
@@ -114,13 +113,13 @@ export default function CreateMembers() {
     Papa.parse(csvFile, {
       header: true,
       complete: async (results: any) => {
-        // Filter out rows where email, password, mobileNumber, balance, or accountNumber is empty
+        // Filter out rows where email, password, mobileNumber, savingsBalance, sharesBalance, or accountNumber is empty
         const validData = results.data.filter(
           (row: any) =>
             row.email &&
             row.password &&
             row.mobileNumber &&
-            row.balance &&
+            (row.savingsBalance || row.sharesBalance) &&
             row.accountNumber
         );
 
@@ -128,7 +127,7 @@ export default function CreateMembers() {
 
         try {
           const response = await axios.post(
-            "https://bank-server-7h17.onrender.com/admin/bulkmembers",
+            `${baseURL}/admin/bulkmembers`,
             validData
           );
           console.log("Backend Response:", response.data);
@@ -189,7 +188,7 @@ export default function CreateMembers() {
                       id="mobileNumber"
                       value={mobileNumber}
                       onChange={(e) => setMobileNumber(e.target.value)}
-                      placeholder="Enter mobile number,Eg 0554674801"
+                      placeholder="Enter mobile number, Eg 0554674801"
                     />
                   </div>
                   <div className="space-y-2">
@@ -202,15 +201,27 @@ export default function CreateMembers() {
                       placeholder="Enter password"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="balance">Balance</Label>
-                    <Input
-                      id="balance"
-                      type="number"
-                      value={balance}
-                      onChange={(e) => setBalance(e.target.value)}
-                      placeholder="Enter balance"
-                    />
+                  <div className=" flex gap-5">
+                    <div className="space-y-2">
+                      <Label htmlFor="savingsBalance">Savings Balance</Label>
+                      <Input
+                        id="savingsBalance"
+                        type="number"
+                        value={savingsBalance}
+                        onChange={(e) => setSavingsBalance(e.target.value)}
+                        placeholder="Enter savings balance"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="sharesBalance">Shares Balance</Label>
+                      <Input
+                        id="sharesBalance"
+                        type="number"
+                        value={sharesBalance}
+                        onChange={(e) => setSharesBalance(e.target.value)}
+                        placeholder="Enter shares balance"
+                      />
+                    </div>
                   </div>
                 </div>
               </form>
@@ -278,7 +289,6 @@ export default function CreateMembers() {
     </div>
   );
 }
-
 function CircleCheckIcon(props: any) {
   return (
     <svg

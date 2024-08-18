@@ -22,6 +22,8 @@ import { Button } from "@/components/ui/button";
 import Spinner from "./Spinner";
 // import { toast, ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
+const baseURL =
+   "https://bank-server-7h17.onrender.com";
 
 export default function AdminDeposit() {
   // State variables for form inputs
@@ -38,9 +40,7 @@ export default function AdminDeposit() {
     // Fetch customers from the backend
     async function fetchCustomers() {
       try {
-        const response = await axios.get(
-          "https://bank-server-7h17.onrender.com/admin/members"
-        );
+        const response = await axios.get(`${baseURL}/admin/members`);
         setCustomers(response.data);
       } catch (error) {
         console.error("Failed to fetch customers", error);
@@ -56,15 +56,12 @@ export default function AdminDeposit() {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "https://bank-server-7h17.onrender.com/deposit",
-        {
-          account: accountType,
-          amount,
-          email,
-          accountNumber: selectedCustomer,
-        }
-      );
+      const response = await axios.post(`${baseURL}/deposit`, {
+        account: accountType,
+        amount,
+        email,
+        accountNumber: selectedCustomer,
+      });
 
       console.log(response);
 
@@ -109,7 +106,7 @@ export default function AdminDeposit() {
                   <SelectContent>
                     {/* <SelectItem value="checking">Checking</SelectItem> */}
                     <SelectItem value="savings">Citti Savings</SelectItem>
-                    <SelectItem value="investment">Citti Investment</SelectItem>
+                    <SelectItem value="shares">Citti Shares</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

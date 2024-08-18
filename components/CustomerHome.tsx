@@ -22,24 +22,35 @@ import { useEffect, useState } from "react";
 import useTokenStore from "@/lib/store";
 import axios from "axios";
 import Current from "./Current";
+import Image from "next/image";
+import noDataImage from "@/public/last image.png"; // Update this with your actual image path
+import { SkeletonDemo } from "./Skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+
+const baseURL = "https://bank-server-7h17.onrender.com";
 
 export default function CustomerHome() {
   const [fetchData, setFetchedData] = useState<any>({});
   const { datas } = useTokenStore();
-  const [isloading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(
-          `https://bank-payment-server.onrender.com/users/reports`,
-          {
-            params: {
-              accountNumber: datas?.account?.accountNumber,
-            },
-          }
-        );
+        const response = await axios.get(`${baseURL}/users/reports`, {
+          params: {
+            accountNumber: datas?.account?.accountNumber,
+          },
+        });
         setIsLoading(false);
         setFetchedData(response.data);
       } catch (error) {
@@ -94,122 +105,152 @@ export default function CustomerHome() {
             }
           >
             {classifiedTransaction.type === "Deposit"
-              ? `+$${classifiedTransaction?.amount?.toFixed(2)}`
-              : `-$${classifiedTransaction?.amount?.toFixed(2)}`}
+              ? `+ ₵ ${classifiedTransaction?.amount?.toFixed(2)}`
+              : `- ₵ ${classifiedTransaction?.amount?.toFixed(2)}`}
           </div>
         </div>
       );
     });
 
+  const reports = fetchData?.allTransactions || [];
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
-      <main className="flex-1 p-4 sm:p-6">
-        {isloading ? (
+      <main className="flex-1 gap-5 p-4 sm:p-6">
+        {isLoading ? (
           <Current />
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <Card className="shadow-md border-none">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <Card>
               <CardHeader>
-                <CardTitle className=" text-blue-900 text-4xl  font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
+                <CardTitle className=" text-blue-900   font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
                   Citti Savings
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex items-center justify-between">
-                <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-blue-300 to-blue-500">
-                  ₵ {fetchData?.totals?.checking?.toFixed(2) || 0.0}
+                <div className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-blue-300 to-blue-500">
+                  ₵ {fetchData?.totals?.savings?.toFixed(2) || 0.0}
                 </div>
-                {/* <Link href="/dashboard/deposits" prefetch={false}>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white border-none hover:opacity-90"
-                  >
-                    Deposit
-                  </Button>
-                </Link> */}
               </CardContent>
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle className=" text-blue-900 text-4xl  font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
+                <CardTitle className=" text-blue-900   font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
                   Citti Shares
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex items-center justify-between">
-                {/* <div className="text-4xl font-bold">
-                  ₵{fetchData?.totals?.investing?.toFixed(2) ?? 0.0}
-                </div> */}
-                <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-blue-300 to-blue-500">
-                  ₵ {fetchData?.totals?.investing?.toFixed(2) || 0.0}
+                <div className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-blue-300 to-blue-500">
+                  ₵ {fetchData?.totals?.shares?.toFixed(2) || 0.0}
                 </div>
-                {/* <Link
-                  href="/dashboard/withdraw"
-                  className="text-primary"
-                  prefetch={false}
-                >
-                  <Button variant="outline" size="sm">
-                    Deposit
-                  </Button>
-                </Link> */}
               </CardContent>
             </Card>
-            <Card>
+            <Card className="">
               <CardHeader>
-                <CardTitle className=" text-blue-900 text-4xl  font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
-                  Transactions
+                <CardTitle className=" text-blue-900   font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
+                  Recent Transactions
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-2">{recentTransactions}</div>
               </CardContent>
-              <CardFooter>
+              {/* <CardFooter>
                 <Link href="#" className="text-primary" prefetch={false}>
                   View all transactions
                 </Link>
-              </CardFooter>
+              </CardFooter> */}
             </Card>
-            {/* <Card>
-              <CardHeader>
-                <CardTitle>Savings Account</CardTitle>
-              </CardHeader>
-              <CardContent className="flex items-center justify-between">
-                <div className="text-4xl font-bold">
-                  ${fetchData?.totals?.savings?.toFixed(2) ?? 0.0}
-                </div>
-              </CardContent>
-            </Card> */}
             <Card>
               <CardHeader>
-                <CardTitle className=" text-blue-900 text-4xl  font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
+                <CardTitle className=" text-blue-900   font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
                   Total Balance
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex items-center justify-between">
-                <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-blue-300 to-blue-500">
-                  ₵ {fetchData?.totals?.checking?.toFixed(2) || 0.0}
+                <div className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-blue-300 to-blue-500">
+                  ₵{" "}
+                  {(
+                    (fetchData?.totals?.savings || 0) +
+                    (fetchData?.totals?.shares || 0)
+                  ).toFixed(2)}
                 </div>
-                {/* <Link
-                  href="/dashboard/deposits"
-                  className="text-primary"
-                  prefetch={false}
-                >
-                  <Button variant="outline" size="sm">
-                    Deposit
-                  </Button>
-                </Link>
-                <Link
-                  href="/dashboard/withdraw"
-                  className="text-primary"
-                  prefetch={false}
-                >
-                  <Button variant="outline" size="sm">
-                    withdraw
-                  </Button>
-                </Link> */}
               </CardContent>
             </Card>
           </div>
         )}
+        <Card className=" w-full mt-10">
+          <CardHeader>
+            <CardTitle className=" text-blue-900 text-2xl  font-bold bg-clip-text  from-blue-500 via-purple-500 to-pink-500">
+              All Transactions
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {isLoading ? (
+              <SkeletonDemo />
+            ) : reports.length === 0 ? (
+              <div className="flex flex-col my-8 gap-y-8 items-center justify-center">
+                <Image
+                  src={noDataImage}
+                  alt="No data fetched"
+                  className="w-1/3 lg:w-1/12"
+                />
+                <p className="text-xl font-bold">No data fetched</p>
+              </div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Account Number</TableHead>
+                    <TableHead>Amount(GHS)</TableHead>
+                    <TableHead>Type</TableHead>
+                    <TableHead>Account</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Status</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {reports.map((transaction: any, index: any) => {
+                    const classifiedTransaction =
+                      classifyTransaction(transaction);
+
+                    return (
+                      <TableRow key={index}>
+                        <TableCell>
+                          <div className="text-sm text-muted-foreground">
+                            {transaction.accountNumber}
+                          </div>
+                        </TableCell>
+                        <TableCell>{classifiedTransaction.amount}.00</TableCell>
+                        <TableCell>{classifiedTransaction.type}</TableCell>{" "}
+                        <TableCell>{transaction.account}</TableCell>
+                        {/* Add this line */}
+                        <TableCell>
+                          {new Date(
+                            transaction.dateDeposited ||
+                              transaction.dateWithdrawn
+                          ).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell>
+                          <Badge
+                            className={`${
+                              transaction.status === "pending"
+                                ? "bg-yellow-500"
+                                : transaction.status === "success"
+                                ? " bg-green-500"
+                                : "bg-red-500"
+                            } text-white`}
+                          >
+                            {transaction.status ?? "rejected"}
+                          </Badge>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            )}
+          </CardContent>
+        </Card>
       </main>
     </div>
   );
@@ -229,8 +270,8 @@ function ArrowDownIcon(props: any) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="M12 5v14" />
-      <path d="m19 12-7 7-7-7" />
+      <path d="M12 19V6"></path>
+      <path d="M5 12l7 7 7-7"></path>
     </svg>
   );
 }
@@ -249,49 +290,8 @@ function ArrowUpIcon(props: any) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d="m5 12 7-7 7 7" />
-      <path d="M12 19V5" />
-    </svg>
-  );
-}
-
-function BanknoteIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect width="20" height="12" x="2" y="6" rx="2" />
-      <circle cx="12" cy="12" r="2" />
-      <path d="M6 12h.01M18 12h.01" />
-    </svg>
-  );
-}
-
-function XIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
+      <path d="M12 5v13"></path>
+      <path d="M19 12l-7-7-7 7"></path>
     </svg>
   );
 }

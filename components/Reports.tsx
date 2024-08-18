@@ -31,6 +31,8 @@ import html2canvas from "html2canvas";
 import { SkeletonDemo } from "./Skeleton";
 import Image from "next/image";
 import nodataimage from "@/public/last image.png";
+const baseURL =
+   "https://bank-server-7h17.onrender.com";
 
 export default function Reports() {
   const [transactions, setTransactions] = useState([]);
@@ -48,7 +50,7 @@ export default function Reports() {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(`http://localhost:3001/admin/reports`);
+        const response = await axios.get(`${baseURL}/admin/reports`);
         if (!response) {
           throw new Error("Failed to fetch data");
         }

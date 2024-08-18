@@ -1,14 +1,10 @@
 import Image from "next/image";
 import React from "react";
-import hero from "@/public/Big.svg";
 import group from "@/public/Group.jpg";
-import hero2 from "@/public/Big2.svg";
-import fb from "@/public/facebook.svg";
-import link from "@/public/Vector.svg";
-import yt from "@/public/youtube.svg";
 import call from "@/public/call.svg";
 import Link from "next/link";
 import logo from "../public/png/logo-no-background.png";
+import instagram from "@/public/2227.jpg"; // Add Instagram icon import
 
 const Hero: React.FC = () => {
   return (
@@ -43,46 +39,39 @@ const Hero: React.FC = () => {
         </div>
       </header>
 
-      <main className="flex flex-col max-sm:flex-col-reverse sm:flex-col-reverse lg:flex-row  py-12">
-        <div className="w-full md:w-1/2  pr-10" data-aos="fade-up">
-          <h1 className="text-5xl pt-12 font-bold mb-4 px-5">
-            Chase Your Dream with us
+      <main className="flex  flex-col max-sm:flex-col sm:flex-col-reverse lg:flex-row py-12">
+        <div className="w-full space-y-6 md:w-1/2 pr-10" data-aos="fade-up">
+          <h1 className="text-5xl px-5 leading-tight font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-400  to-blue-500">
+            WORK. SAVE. PROSPER.
           </h1>
           <p className="text-gray-600 mb-8 px-5">
-            The harder you work for something, the greater you'll feel when you
-            achieve it.
+            We remain committed to supporting all our hardworking business men
+            and women with affordable credit lines; and offering attractive
+            savings packages to our clients. Let us prosper together!
           </p>
-          <div className="flex space-x-4 px-5 mb-8">
+          <div className="flex  space-x-4 px-5 mb-8">
             <Link href="/sign-in">
-              <button className="md:px-6 px-4 text-sm py-4 bg-pink-500 text-white font-bold rounded-full hover:bg-pink-600">
-                APPLY ONLINE
+              <button className="md:px-6 px-4 w-[150px] h-[50px] text-sm py-4 bg-pink-500 text-white font-bold rounded-full hover:bg-pink-600">
+                Join Us
               </button>
             </Link>
-
-            <Link href="/sign-up/banks">
-              <button className="md:px-6 px-3 py-3 border border-pink-500 text-pink-500 font-bold rounded-full hover:bg-pink-50">
-                GET STARTED
-              </button>
-            </Link>
-          </div>
-          <div className="flex px-5 items-center space-x-4">
-            <span className="text-gray-600 inline-flex gap-x-2">
-              <Image src={call} alt="call" />
-              16519
-            </span>
-            <div className="flex space-x-5">
-              <Image src={fb} alt="call" />
-              <Image src={link} alt="call" />
-              <Image src={yt} alt="call" />
+            <div className="flex px-5 items-center space-x-4">
+              <span className="text-gray-600 inline-flex gap-x-2">
+                <Image src={call} alt="call" />
+                <p>0257074272</p>
+              </span>
+              <div className="flex w-1/12 space-x-5">
+                <Image src={instagram} alt="Instagram" />{" "}
+                {/* Add Instagram link */}
+              </div>
             </div>
           </div>
         </div>
 
         <div
-          className=" lg:mt-[-7.5rem] lg:mr-[-8rem]  z-10  max-sm:mt-[-7rem]  md:w-1/2 mt-8 md:mt-0 relative"
+          className="lg:mt-[-7.5rem] lg:mr-[-8rem] z-10 md:w-1/2 mt-8 md:mt-0 relative"
           data-aos="fade-up"
         >
-          {/* <Image src={hero} alt="Happy family" className="max-md:hidden " /> */}
           <Image src={group} alt="Happy family" className="" />
         </div>
       </main>

@@ -28,6 +28,7 @@ import axios from "axios";
 import { SkeletonDemo } from "./Skeleton";
 import Image from "next/image";
 import nodataImage from "@/public/last image.png";
+const baseURL = "https://bank-server-7h17.onrender.com";
 
 export default function MemberList() {
   const [search, setSearch] = useState("");
@@ -41,9 +42,7 @@ export default function MemberList() {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(
-          `https://bank-server-7h17.onrender.com/admin/members`
-        );
+        const response = await fetch(`${baseURL}/admin/members`);
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -64,16 +63,13 @@ export default function MemberList() {
     console.log(updatedMember);
 
     try {
-      await axios.put(
-        `https://bank-server-7h17.onrender.com/admin/member/${updatedMember?._id}`,
-        {
-          name: updatedMember.name,
-          email: updatedMember.email,
-          accountNumber: updatedMember.accountNumber,
-          balance: updatedMember.balance,
-          password: updatedMember.password,
-        }
-      );
+      await axios.put(`${baseURL}/admin/member/${updatedMember?._id}`, {
+        name: updatedMember.name,
+        email: updatedMember.email,
+        accountNumber: updatedMember.accountNumber,
+        balance: updatedMember.balance,
+        password: updatedMember.password,
+      });
 
       const updatedMembers: any = members.map((m: any) =>
         m._id === updatedMember._id ? updatedMember : m
@@ -87,9 +83,7 @@ export default function MemberList() {
 
   const handleDeleteCustomer = async (memberId: any) => {
     try {
-      await axios.delete(
-        `https://bank-server-7h17.onrender.com/users/delete/${memberId}`
-      );
+      await axios.delete(`${baseURL}/users/delete/${memberId}`);
 
       const updatedMembers = members.filter((m: any) => m.id !== memberId);
       setMembers(updatedMembers);
@@ -126,7 +120,6 @@ export default function MemberList() {
   return (
     <div className="container mx-auto py-8">
       <div className="mb-6 flex items-center justify-between">
-        
         <h2 className="mt-6  text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
           Bank Members
         </h2>

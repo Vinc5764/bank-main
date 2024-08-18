@@ -87,7 +87,7 @@ function RootLayout({ children }: any) {
           </Link>
         </nav>
         <div className="flex items-center gap-2">
-          <span className="">{name}</span>
+          <span className="">{userType === "customer" && name}</span>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -128,7 +128,7 @@ function RootLayout({ children }: any) {
         >
           <nav className="flex flex-col items-center gap-4 px-2 py-5  sm:gap-6">
             <TooltipProvider>
-              {sidebarLinks.map((link) => (
+              {sidebar.map((link) => (
                 <Tooltip key={link.label}>
                   <TooltipTrigger asChild>
                     <Link

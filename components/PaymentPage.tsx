@@ -20,6 +20,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Spinner from "./Spinner";
+import useTokenStore from "@/lib/store";
+const baseURL = "https://bank-server-7h17.onrender.com";
 
 export default function Withdrawal() {
   // State variables for form inputs
@@ -27,20 +29,19 @@ export default function Withdrawal() {
   const [amount, setAmount] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const { datas } = useTokenStore();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "https://bank-server-7h17.onrender.com/deposit",
-        {
-          account: accountType,
-          amount,
-          email,
-        }
-      );
+      const response = await axios.post(`${baseURL}/deposit`, {
+        account: accountType,
+        amount,
+        email,
+        accountNumber: datas?.account?.accountNumber,
+      });
 
       console.log(response);
 
@@ -84,7 +85,9 @@ export default function Withdrawal() {
       </Card> */}
       <Card>
         <CardHeader>
-          <CardTitle>Deposit Funds</CardTitle>
+          <CardTitle className="mt-6  text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
+            Deposit Funds
+          </CardTitle>
           <CardDescription>Enter the details for your Deposit.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
@@ -99,7 +102,7 @@ export default function Withdrawal() {
                   <SelectContent>
                     {/* <SelectItem value="checking">Checking</SelectItem> */}
                     <SelectItem value="savings">Citti Savings</SelectItem>
-                    <SelectItem value="investment">Citti Investment</SelectItem>
+                    <SelectItem value="shares">Citti Shares</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -124,7 +127,12 @@ export default function Withdrawal() {
                 placeholder="Enter email"
               />
             </div>
-            <Button type="submit" size="lg" disabled={loading}>
+            <Button
+              type="submit"
+              className="w-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 text-white"
+              size="lg"
+              disabled={loading}
+            >
               {loading ? <Spinner /> : "Deposit"}
             </Button>
           </form>

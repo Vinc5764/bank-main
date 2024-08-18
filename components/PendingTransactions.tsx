@@ -21,6 +21,8 @@ import {
 import { SkeletonDemo } from "./Skeleton";
 import Image from "next/image";
 import noimagedata from "@/public/last image.png";
+const baseURL =
+ "https://bank-server-7h17.onrender.com";
 
 export default function PendingTransaction() {
   const [isLoading, setIsLoading] = useState(false);
@@ -57,13 +59,13 @@ export default function PendingTransaction() {
       .filter((request: any) => {
         return (
           (filter.purpose === "" ||
-            request.purpose
-              .toLowerCase()
-              .includes(filter.purpose.toLowerCase())) &&
-          (filter.account === "" ||
-            request.account
-              .toLowerCase()
-              .includes(filter.accountType.toLowerCase())) &&
+            request?.purpose
+              ?.toLowerCase()
+              ?.includes(filter.purpose.toLowerCase())) &&
+          (filter?.account === "" ||
+            request?.account
+              ?.toLowerCase()
+              ?.includes(filter.accountType.toLowerCase())) &&
           request.amount >= filter.minAmount &&
           request.amount <= filter.maxAmount &&
           (!filter.startDate ||
@@ -78,17 +80,32 @@ export default function PendingTransaction() {
       });
   }, [search, filter, fetchData]);
 
-  const handleApprove = async (accountNumber: any) => {
+  const handleApprove = async (req: any) => {
     try {
-      const response = await fetch(
-        `http://localhost:3001/admin/approve/${accountNumber}`,
-        {
-          method: "POST",
-        }
-      );
+      const { accountNumber, reason, account, amount } = req;
+
+      // Create the request body
+      const requestBody = JSON.stringify({
+        accountNumber,
+        reason,
+        account,
+        amount,
+      });
+
+      // Make the POST request with the request body
+      const response = await fetch(`${baseURL}/withdrawal/approve/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Set content type to JSON
+        },
+        body: requestBody, // Attach the request body
+      });
+
       if (!response.ok) {
         throw new Error("Failed to approve withdrawal");
       }
+
+      // Filter out the approved request from the fetched data
       setFetchedData(
         fetchData.filter((req: any) => req.accountNumber !== accountNumber)
       );
@@ -97,20 +114,21 @@ export default function PendingTransaction() {
     }
   };
 
-  const handleReject = async (accountNumber: any) => {
+  const handleReject = async (req: any) => {
     try {
-      const response = await fetch(
-        `http://localhost:3001/admin/reject/${accountNumber}`,
-        {
-          method: "POST",
-        }
-      );
+      const { _id } = req;
+
+      const requestBody = JSON.stringify({
+        id: _id,
+      });
+      const response = await fetch(`http://localhost:3001/withdrawal/reject`, {
+        method: "POST",
+        body: requestBody,
+      });
       if (!response.ok) {
         throw new Error("Failed to reject withdrawal");
       }
-      setFetchedData(
-        fetchData.filter((req: any) => req?.accountNumber !== accountNumber)
-      );
+      setFetchedData(fetchData.filter((req: any) => req?._id !== _id));
     } catch (error) {
       console.error("Error rejecting withdrawal:", error);
     }
@@ -141,7 +159,6 @@ export default function PendingTransaction() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-       
         <h2 className="mt-6  text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
           Pending Withdrawals
         </h2>
@@ -266,7 +283,7 @@ export default function PendingTransaction() {
                 <TableRow>
                   <TableHead>Account Number</TableHead>
                   <TableHead>Account Type</TableHead>
-                  <TableHead>Amount</TableHead>
+                  <TableHead>Amount(GHS)</TableHead>
                   <TableHead>Request Date</TableHead>
                   <TableHead>Purpose</TableHead>
                   <TableHead>Actions</TableHead>
@@ -277,7 +294,7 @@ export default function PendingTransaction() {
                   <TableRow key={request.accountNumber}>
                     <TableCell>{request.accountNumber}</TableCell>
                     <TableCell>{request.account}</TableCell>
-                    <TableCell>${request.amount.toFixed(2)}</TableCell>
+                    <TableCell>{request.amount.toFixed(2)}</TableCell>
                     <TableCell>
                       {new Date(
                         request.dateDeposited || request.dateWithdrawn
@@ -288,14 +305,11 @@ export default function PendingTransaction() {
                       <div className="flex items-center gap-2">
                         <Button
                           size="sm"
-                          onClick={() => handleApprove(request.accountNumber)}
+                          onClick={() => handleApprove(request)}
                         >
                           Approve
                         </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => handleReject(request.accountNumber)}
-                        >
+                        <Button size="sm" onClick={() => handleReject(request)}>
                           Decline
                         </Button>
                       </div>

@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/dialog";
 import useTokenStore from "@/lib/store";
 import Spinner from "./Spinner";
+const baseURL = "https://bank-server-7h17.onrender.com";
 
 export default function Withdrawal() {
   // State variables for form inputs
@@ -44,16 +45,13 @@ export default function Withdrawal() {
     e.preventDefault();
     setIsloading(true);
     try {
-      const response = await axios.post(
-        "https://9a14-197-251-205-122.ngrok-free.app/withdrawal",
-        {
-          account: accountType,
-          accountNumber: datas.account.accountNumber,
-          amount,
-          purpose,
-          email,
-        }
-      );
+      const response = await axios.post(`${baseURL}/withdrawal`, {
+        account: accountType,
+        accountNumber: datas.account.accountNumber,
+        amount,
+        purpose,
+        email,
+      });
       setIsloading(false);
       console.log("Withdrawal successful:", response.data);
       setIsModalOpen(true); // Open the modal on successful request
@@ -89,7 +87,9 @@ export default function Withdrawal() {
       </Card> */}
       <Card>
         <CardHeader>
-          <CardTitle>Withdraw Funds</CardTitle>
+          <CardTitle className="mt-6  text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
+            Withdraw Funds
+          </CardTitle>
           <CardDescription>
             Enter the details for your withdrawal.
           </CardDescription>
@@ -106,7 +106,7 @@ export default function Withdrawal() {
                   <SelectContent>
                     {/* <SelectItem value="checking">Checking</SelectItem> */}
                     <SelectItem value="savings">Citti Savings</SelectItem>
-                    <SelectItem value="investment">Citti Investment</SelectItem>
+                    <SelectItem value="shares">Citti Shares</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -140,7 +140,11 @@ export default function Withdrawal() {
                 placeholder="Enter email"
               />
             </div>
-            <Button type="submit" size="lg">
+            <Button
+              type="submit"
+              className="w-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 text-white"
+              size="lg"
+            >
               {isloading ? <Spinner /> : "withdraw"}
             </Button>
           </form>

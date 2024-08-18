@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { uploadFile } from "@/utils/upload";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/Spinner";
+const baseURL =
+  "http://localhost:3001" || "https://bank-server-7h17.onrender.com";
 
 export default function Page() {
   const [file, setFile] = useState<any>(null);
@@ -54,16 +56,13 @@ export default function Page() {
     };
 
     try {
-      const response = await fetch(
-        "https://bank-server-7h17.onrender.com/bank/signup",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch(`${baseURL}/bank/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
       if (response.ok) {
         console.log("Bank signed up successfully");
@@ -87,7 +86,7 @@ export default function Page() {
             Registration Form
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Join our platform for finacial freedom 
+            Join our platform for finacial freedom
           </p>
         </div>
         <form className="space-y-6" onSubmit={handleSubmit}>

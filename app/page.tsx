@@ -12,14 +12,14 @@ import React from "react";
 const page = () => {
   return (
     <div>
-      <Hero  />
+      <Hero />
       <Customers />
       <Partners />
       <Glance />
       <OurServices />
-      <OurBestResults />
+      {/* <OurBestResults /> */}
       <TeamSection />
-      <Newsletter />
+      {/* <Newsletter /> */}
       <Footers />
     </div>
   );
