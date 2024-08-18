@@ -81,12 +81,12 @@ const HomePage = () => {
             <DialogHeader>
               <DialogTitle>Set Name and Reset Password</DialogTitle>
               <DialogDescription>
-                Please set your name and reset your password.
+                Please set your firstname and reset your password.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name">First Name</Label>
                 <Input
                   id="name"
                   value={name}

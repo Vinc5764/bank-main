@@ -20,63 +20,59 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Spinner from "./Spinner";
-// import { toast, ToastContainer } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
-const baseURL =
-   "https://bank-server-7h17.onrender.com";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { CircleCheckIcon } from "lucide-react";
+
+const baseURL = "https://bank-server-7h17.onrender.com";
 
 export default function AdminDeposit() {
-  // State variables for form inputs
   const [accountType, setAccountType] = useState("");
   const [amount, setAmount] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [customers, setCustomers] = useState<any>([]);
   const [selectedCustomer, setSelectedCustomer] = useState("");
-
-  console.log(selectedCustomer);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   useEffect(() => {
-    // Fetch customers from the backend
     async function fetchCustomers() {
       try {
         const response = await axios.get(`${baseURL}/admin/members`);
         setCustomers(response.data);
       } catch (error) {
         console.error("Failed to fetch customers", error);
-        // toast.error("Failed to fetch customers!");
       }
     }
 
     fetchCustomers();
   }, []);
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
+    setIsModalOpen(true); // Open the confirmation modal
+  };
+
+  const handleConfirmDeposit = async () => {
     setLoading(true);
+    setIsModalOpen(false); // Close the modal before processing
 
     try {
-      const response = await axios.post(`${baseURL}/deposit`, {
+      const response = await axios.post(`${baseURL}/deposit/manual`, {
         account: accountType,
         amount,
         email,
         accountNumber: selectedCustomer,
       });
 
-      console.log(response);
-
-      if (response.data.data.authorization_url) {
-        window.location.href = response.data.data.authorization_url;
-      } else {
-        console.error("Authorization URL not found in the response.");
-        // toast.error("Authorization URL not found in the response.");
-      }
-
-      console.log(" successful:", response.data);
-      // toast.success("Deposit initiated successfully!");
+      setIsSuccessModalOpen(true); // Open the success modal
     } catch (error) {
-      console.error("Withdrawal failed", error);
-      // toast.error("Deposit failed!");
+      console.error("Deposit failed", error);
     } finally {
       setLoading(false);
     }
@@ -84,11 +80,10 @@ export default function AdminDeposit() {
 
   return (
     <div className="grid md:grid-cols-1 gap-8 max-w-4xl mx-auto p-6">
-      {/* <ToastContainer /> */}
       <Card>
         <CardHeader>
           <CardTitle>
-            <h2 className="mt-6  text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
+            <h2 className="mt-6 text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
               Deposit Customer Funds
             </h2>
           </CardTitle>
@@ -104,7 +99,6 @@ export default function AdminDeposit() {
                     <SelectValue placeholder="Select account type" />
                   </SelectTrigger>
                   <SelectContent>
-                    {/* <SelectItem value="checking">Checking</SelectItem> */}
                     <SelectItem value="savings">Citti Savings</SelectItem>
                     <SelectItem value="shares">Citti Shares</SelectItem>
                   </SelectContent>
@@ -121,16 +115,6 @@ export default function AdminDeposit() {
                 />
               </div>
             </div>
-            {/* <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter email"
-              />
-            </div> */}
             <div className="space-y-2">
               <Label htmlFor="customer">Select Customer</Label>
               <Select
@@ -163,6 +147,41 @@ export default function AdminDeposit() {
           </form>
         </CardContent>
       </Card>
+
+      {/* Confirmation Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <div className="flex flex-col items-center justify-center gap-4 py-8">
+            <CircleCheckIcon className="size-12 text-green-500" />
+            <p className="text-lg font-medium">
+              Are you sure you want to proceed with the deposit?
+            </p>
+          </div>
+          <DialogFooter>
+            <Button onClick={handleConfirmDeposit} disabled={loading}>
+              {loading ? <Spinner /> : "Confirm"}
+            </Button>
+            <DialogClose asChild>
+              <Button variant="ghost">Cancel</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Success Modal */}
+      <Dialog open={isSuccessModalOpen} onOpenChange={setIsSuccessModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <div className="flex flex-col items-center justify-center gap-4 py-8">
+            <CircleCheckIcon className="size-12 text-green-500" />
+            <p className="text-lg font-medium">Deposit successful!</p>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button">OK</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

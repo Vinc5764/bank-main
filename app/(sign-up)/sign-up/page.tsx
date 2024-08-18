@@ -86,7 +86,7 @@ export default function Page() {
             Registration Form
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Join our platform for finacial freedom
+            Welcome to Citti Credit
           </p>
         </div>
         <form className="space-y-6" onSubmit={handleSubmit}>

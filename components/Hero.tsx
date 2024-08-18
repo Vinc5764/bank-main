@@ -39,9 +39,9 @@ const Hero: React.FC = () => {
         </div>
       </header>
 
-      <main className="flex  flex-col max-sm:flex-col sm:flex-col-reverse lg:flex-row py-12">
-        <div className="w-full space-y-6 md:w-1/2 pr-10" data-aos="fade-up">
-          <h1 className="text-5xl px-5 leading-tight font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-400  to-blue-500">
+      <main className="flex  flex-col max-sm:flex-col-reverse max-sm:space-y-5 sm:flex-col-reverse lg:flex-row py-12">
+        <div className="w-full max-sm:mt-[2rem] space-y-6 md:w-1/2 pr-10" data-aos="fade-up">
+          <h1 className="text-2xl md:text-5xl px-5 leading-tight font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-400  to-blue-500">
             WORK. SAVE. PROSPER.
           </h1>
           <p className="text-gray-600 mb-8 px-5">
@@ -55,12 +55,12 @@ const Hero: React.FC = () => {
                 Join Us
               </button>
             </Link>
-            <div className="flex px-5 items-center space-x-4">
+            <div className="flex px-5 items-center space-x-6">
               <span className="text-gray-600 inline-flex gap-x-2">
                 <Image src={call} alt="call" />
                 <p>0257074272</p>
               </span>
-              <div className="flex w-1/12 space-x-5">
+              <div className="flex  w-11 space-x-5">
                 <Image src={instagram} alt="Instagram" />{" "}
                 {/* Add Instagram link */}
               </div>
@@ -69,7 +69,7 @@ const Hero: React.FC = () => {
         </div>
 
         <div
-          className="lg:mt-[-7.5rem] lg:mr-[-8rem] z-10 md:w-1/2 mt-8 md:mt-0 relative"
+          className="lg:mt-[-7.5rem] max-sm:mt-[-8rem] lg:mr-[-8rem] z-10 md:w-1/2 mt-8 md:mt-0 relative"
           data-aos="fade-up"
         >
           <Image src={group} alt="Happy family" className="" />

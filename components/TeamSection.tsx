@@ -84,7 +84,7 @@ const TeamSection: React.FC = () => {
           <div className="w-16 h-1 bg-blue-900 mx-auto"></div>
         </div>
         <div
-          className="flex overflow-x-auto space-x-4 snap-x snap-mandatory  scrollbar-hide"
+          className="md:flex space-y-5 md:space-y-0 md:overflow-x-auto md:space-x-4 snap-x snap-mandatory  scrollbar-hide"
           data-aos="fade-right"
         >
           {teamMembers.map((member, index) => (
