@@ -105,8 +105,8 @@ export default function CustomerHome() {
             }
           >
             {classifiedTransaction.type === "Deposit"
-              ? `+ ₵ ${classifiedTransaction?.amount?.toFixed(2)}`
-              : `- ₵ ${classifiedTransaction?.amount?.toFixed(2)}`}
+              ? `+ ₵ ${classifiedTransaction?.amount}`
+              : `- ₵ ${classifiedTransaction?.amount}`}
           </div>
         </div>
       );
