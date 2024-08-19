@@ -35,7 +35,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
-const baseURL = "https://bank-server-7h17.onrender.com";
+const baseURL = "http://localhost:3001";
 
 export default function CustomerHome() {
   const [fetchData, setFetchedData] = useState<any>({});
@@ -80,7 +80,7 @@ export default function CustomerHome() {
     };
   };
 
-  const recentTransactions = fetchData?.allTransactions
+  const recentTransactions = fetchData?.groupedTransactions
     ?.slice(-3)
     .map((transaction: any) => {
       const classifiedTransaction = classifyTransaction(transaction);
