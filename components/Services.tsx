@@ -1,8 +1,8 @@
 import Image from "next/image";
 import React from "react";
-import image1 from "@/public/Image.svg";
-import image2 from "@/public/Image2.svg";
-import image3 from "@/public/Image3.svg";
+import image1 from "@/public/savings.jpg";
+import image2 from "@/public/shares.jpg";
+import image3 from "@/public/loans.jpg";
 
 interface ServiceProps {
   image: string;
@@ -10,11 +10,10 @@ interface ServiceProps {
   description: string;
 }
 
-const ServiceCard: React.FC<ServiceProps> = ({ image, title, description }) => (
+const ServiceCard: React.FC<any> = ({ image, title, description }) => (
   <div className="flex flex-col">
     <Image
-      width={48}
-      height={48}
+      
       src={image}
       alt={title}
       className="w-full h-48 object-cover rounded-lg mb-4"
@@ -47,16 +46,16 @@ const ServiceCard: React.FC<ServiceProps> = ({ image, title, description }) => (
 const OurServices: React.FC = () => {
   const services = [
     {
-      image: image1,
-      title: "CITTI SAVINGS",
-      description:
-        "Save with us, for a secure savings experience and enjoy an interest rate of 6% per annum.",
-    },
-    {
       image: image2,
       title: "CITTI SHARES",
       description:
         "Our share account entitles members to dividends. Minimum shares are currently available at GHC 500.00.",
+    },
+    {
+      image: image1,
+      title: "CITTI SAVINGS",
+      description:
+        "Save with us, for a secure savings experience and enjoy an interest rate of 6% per annum.",
     },
     {
       image: image3,

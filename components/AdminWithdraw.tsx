@@ -1,7 +1,30 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import * as React from "react";
 import axios from "axios";
+import { Check, ChevronsUpDown } from "lucide-react";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Card,
   CardHeader,
@@ -10,16 +33,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import Spinner from "./Spinner";
 import {
   Dialog,
   DialogContent,
@@ -27,24 +41,31 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { CircleCheckIcon } from "lucide-react";
+import Spinner from "./Spinner";
 
 const baseURL = "https://bank-server-7h17.onrender.com";
 
 export default function AdminWithdrawal() {
-  const [accountType, setAccountType] = useState("");
-  const [amount, setAmount] = useState("");
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [customers, setCustomers] = useState([]);
-  const [selectedCustomer, setSelectedCustomer] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [accountType, setAccountType] = React.useState("");
+  const [amount, setAmount] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  const [customers, setCustomers] = React.useState<any>([]);
+  const [selectedCustomer, setSelectedCustomer] = React.useState("");
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     async function fetchCustomers() {
       try {
         const response = await axios.get(`${baseURL}/admin/members`);
-        setCustomers(response.data);
+        setCustomers(
+          response.data.map((customer: any) => ({
+            value: customer.accountNumber,
+            label: customer.accountNumber,
+          }))
+        );
       } catch (error) {
         console.error("Failed to fetch customers", error);
       }
@@ -63,7 +84,7 @@ export default function AdminWithdrawal() {
     setIsModalOpen(false); // Close the modal before processing
 
     try {
-      const response = await axios.post(`${baseURL}/withdrawal/manual`, {
+      await axios.post(`${baseURL}/withdrawal/manual`, {
         account: accountType,
         amount,
         email,
@@ -117,26 +138,59 @@ export default function AdminWithdrawal() {
                 />
               </div>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 flex flex-col">
               <Label htmlFor="customer">Select Customer</Label>
-              <Select
-                value={selectedCustomer}
-                onValueChange={setSelectedCustomer}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select customer" />
-                </SelectTrigger>
-                <SelectContent>
-                  {customers.map((customer: any) => (
-                    <SelectItem
-                      key={customer.id}
-                      value={customer.accountNumber}
-                    >
-                      {customer.accountNumber}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={open}
+                    className=" justify-between"
+                  >
+                    {selectedCustomer
+                      ? customers.find(
+                          (customer: any) => customer.value === selectedCustomer
+                        )?.label
+                      : "Select customer..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className=" p-0">
+                  <Command>
+                    <CommandInput placeholder="Search customer..." />
+                    <CommandList>
+                      <CommandEmpty>No customer found.</CommandEmpty>
+                      <CommandGroup>
+                        {customers.map((customer: any) => (
+                          <CommandItem
+                            key={customer.value}
+                            value={customer.value}
+                            onSelect={(currentValue) => {
+                              setSelectedCustomer(
+                                currentValue === selectedCustomer
+                                  ? ""
+                                  : currentValue
+                              );
+                              setOpen(false);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                selectedCustomer === customer.value
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {customer.label}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </div>
             <Button
               type="submit"

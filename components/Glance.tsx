@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import image from "@/public/Picture.svg";
+import image from "@/public/ill.jpg";
 
 const Glance: React.FC = () => {
   return (
@@ -10,8 +10,7 @@ const Glance: React.FC = () => {
         data-aos="fade-right"
       >
         <Image
-          width={48}
-          height={48}
+          
           src={image}
           alt="Plant growing from euro coin"
           className="w-[100vh] px-2 pt-2 object-contain"
