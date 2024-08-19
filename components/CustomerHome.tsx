@@ -35,7 +35,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
-const baseURL = "http://localhost:3001";
+const baseURL = "https://bank-server-7h17.onrender.com";
 
 export default function CustomerHome() {
   const [fetchData, setFetchedData] = useState<any>({});
