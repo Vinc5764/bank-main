@@ -124,7 +124,7 @@ export default function CustomerHome() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-blue-900 font-bold bg-clip-text from-blue-500 via-purple-500 to-pink-500">
-                  Citti Savings
+                  Kan Savings
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex items-center justify-between">
@@ -136,7 +136,7 @@ export default function CustomerHome() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-blue-900 font-bold bg-clip-text from-blue-500 via-purple-500 to-pink-500">
-                  Citti Shares
+                  Kan Shares
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex items-center justify-between">
