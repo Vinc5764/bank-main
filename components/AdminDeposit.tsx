@@ -117,8 +117,8 @@ export default function AdminDeposit() {
                     <SelectValue placeholder="Select account type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="savings">Kan  Savings</SelectItem>
-                    <SelectItem value="shares">Kan Shares</SelectItem>
+                    <SelectItem value="savings">Citti Savings</SelectItem>
+                    <SelectItem value="shares">Citti Shares</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

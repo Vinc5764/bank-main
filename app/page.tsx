@@ -12,15 +12,15 @@ import React from "react";
 const page = () => {
   return (
     <div>
-      {/* <Hero />
+      <Hero />
       <Customers />
       <Partners />
       <Glance />
-      <OurServices /> */}
+      <OurServices />
       {/* <OurBestResults /> */}
-      {/* <TeamSection /> */}
-      {/* <Newsletter /> */}
-      {/* <Footers /> */}
+      <TeamSection />
+      <Newsletter />
+      <Footers />
     </div>
   );
 };
